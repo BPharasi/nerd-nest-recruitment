@@ -6,14 +6,8 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div style={{
-      margin: 0,
-      padding: 0,
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-      backgroundColor: '#f7fafc',
-      color: '#374151'
-    }}>
-      <main>{children}</main>
+    <div className="min-h-screen bg-gray-100 text-gray-700 font-sans">
+      <main className="flex flex-row">{children}</main>
     </div>
   )
 }
