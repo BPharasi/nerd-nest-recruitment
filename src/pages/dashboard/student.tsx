@@ -9,17 +9,53 @@ const StudentDashboard: NextPage = () => {
   const { data: session } = useSession();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const navigationItems = [
+    { href: "/dashboard/student/profile", label: "Profile Setup" },
+    { href: "/dashboard/student/resume-builder", label: "Create CV" },
+    { href: "/jobs", label: "Job Search & Matching" },
+    { href: "/dashboard/student/applications", label: "Applications" },
+    { href: "/dashboard/student/interviews", label: "Interviews" },
+    { href: "/dashboard/student/skills-challenge", label: "Skills Challenges" },
+    { href: "/dashboard/student/notifications", label: "Notifications" },
+  ];
+
   return (
-    <>
+    <div className="min-h-screen">
       <Head>
         <title>Nerd.Next Recruitment System - Student Dashboard</title>
       </Head>
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <div className="flex flex-row h-[calc(100vh-120px)]">
-          {/* Sidebar Toggle Button for Mobile */}
+
+      <Header />
+
+      <div className="flex min-h-screen pt-16">
+        <nav className={`
+          w-64 bg-blue-800 text-white 
+          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+          transition-transform duration-200 ease-in-out
+          fixed md:sticky top-16 h-[calc(100vh-4rem)]
+          z-10
+        `}>
+          <div className="p-4">
+            <h2 className="text-xl font-semibold mb-4">Student Menu</h2>
+            <ul className="space-y-2">
+              {navigationItems.map((item, index) => (
+                <li key={index}>
+                  <Link 
+                    href={item.href}
+                    className="block py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-150"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </nav>
+
+        <main className="flex-1 bg-gray-50 w-full md:pl-64">
+          {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-4 text-blue-800 z-50 fixed top-20 left-0 bg-white shadow-md"
+            className="md:hidden fixed top-20 left-4 z-20 p-2 bg-blue-800 text-white rounded-md"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           >
             <svg
@@ -27,7 +63,6 @@ const StudentDashboard: NextPage = () => {
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
             >
               <path
                 strokeLinecap="round"
@@ -37,44 +72,22 @@ const StudentDashboard: NextPage = () => {
               />
             </svg>
           </button>
-          {/* Sidebar Navigation */}
-          <div
-            className={`bg-red-500 p-4 w-64 h-full fixed top-20 ${
-              isSidebarOpen ? "block" : "hidden"
-            } md:static md:block z-40`}
-          >
-            <nav className="space-y-2">
-              <Link href="/dashboard/student/Profile" className="block text-white p-3 rounded">
-                Profile Setup
-              </Link>
-              <Link href="/dashboard/student/resume-builder" className="block text-white p-3 rounded">
-                Create CV
-              </Link>
-              <Link href="/jobs" className="block text-white p-3 rounded">
-                Job Search & Matching
-              </Link>
-              <Link href="/dashboard/student/applications" className="block text-white p-3 rounded">
-                Apply & Track Applications
-              </Link>
-              <Link href="/dashboard/student/interviews" className="block text-white p-3 rounded">
-                Interview Scheduling
-              </Link>
-              <Link href="/dashboard/student/skills-challenge" className="block text-white p-3 rounded">
-                Live Skills Challenges
-              </Link>
-              <Link href="/dashboard/student/notifications" className="block text-white p-3 rounded">
-                View Notifications
-              </Link>
-            </nav>
+
+          <div className="p-6">
+            <div className="max-w-4xl mx-auto">
+              <h1 className="text-3xl font-bold text-blue-800 mb-6">
+                Welcome Back, {session?.user?.name || "Student"}!
+              </h1>
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <p className="text-gray-600">
+                  Select an option from the sidebar to manage your recruitment journey.
+                </p>
+              </div>
+            </div>
           </div>
-          {/* Main Content Area */}
-          <div className="flex-1 p-6 ml-0 md:ml-64 bg-green-100">
-            <h1 className="text-3xl font-bold text-blue-800 mb-4">Student Dashboard</h1>
-            <p className="text-gray-600 mb-6">Welcome, {session?.user?.name || "Student"}! Select an option from the sidebar to get started.</p>
-          </div>
-        </div>
+        </main>
       </div>
-    </>
+    </div>
   );
 };
 
