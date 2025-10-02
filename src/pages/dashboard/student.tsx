@@ -125,7 +125,7 @@ const StudentDashboard: NextPage = () => {
             </div>
             <div className="text-center">
               <h3 className="font-semibold text-white text-lg">{session?.user?.name || "Student"}</h3>
-              <p className="text-sm text-white/80">{session?.user?.email || "student@email.com"}</p>
+              
             </div>
           </div>
         </div>
