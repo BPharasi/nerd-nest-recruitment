@@ -1,0 +1,41 @@
+/* Reset default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Reset HTML and body */
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Ensure Next.js root div takes full height */
+#__next {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Remove default div styles */
+div {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+/* Reset paragraph margins */
+p {
+  margin: 0;
+}
+
+/* Reset headings */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+  font-weight: inherit;
+}

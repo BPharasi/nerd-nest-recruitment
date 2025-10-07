@@ -1,272 +1,208 @@
 import { useState, FormEvent } from "react";
 import { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
+import Link from "next/link"; // For client-side navigation
 import { useRouter } from "next/router";
+import { Mail, Lock, User, Github, Facebook } from "lucide-react";
+// Note: Install lucide-react via npm i lucide-react for icons
 
-interface SignupFormState {
-  firstName: string;
-  lastName: string;
+interface SignupFormData {
+  username: string;
   email: string;
-  country: string;
-  phone: string;
-  address: string;
-  dateAvailable: string;
   password: string;
-  error: string | null;
-  loading: boolean;
+  confirmPassword: string;
 }
 
 const SignupPage: NextPage = () => {
-  const [formState, setFormState] = useState<SignupFormState>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    country: "",
-    phone: "",
-    address: "",
-    dateAvailable: "",
-    password: "",
-    error: null,
-    loading: false,
-  });
   const router = useRouter();
+  const [formData, setFormData] = useState<SignupFormData>({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setFormState((prev) => ({ ...prev, error: null, loading: true }));
-
+    if (formData.password !== formData.confirmPassword) {
+      console.error('Passwords do not match');
+      return;
+    }
     try {
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formState),
-      });
-      if (response.ok) {
-        router.push("/auth/signin");
-      } else {
-        const data = await response.json();
-        setFormState((prev) => ({
-          ...prev,
-          error: data.error || "Signup failed. Try again.",
-          loading: false,
-        }));
-      }
-    } catch (err) {
-      setFormState((prev) => ({
-        ...prev,
-        error: "An error occurred.",
-        loading: false,
-      }));
+      // Handle signup logic here (e.g., API call)
+      console.log('Signup attempt:', formData);
+      router.push('/dashboard'); // Or redirect as needed
+    } catch (error) {
+      console.error('Signup failed:', error);
     }
   };
 
+  const inputStyle = {
+    width: '100%',
+    padding: '0.875rem',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
+    borderRadius: '0.5rem',
+    color: 'white',
+    fontSize: '1rem',
+    textAlign: 'center' as const,
+  };
+
   return (
-    <>
+    <div 
+      className="fixed inset-0 m-0 p-0"
+      style={{
+        backgroundImage: "url('/images/background.gif')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        minWidth: '100vw',
+        overflow: 'hidden',
+      }}>
       <Head>
-        <title>UFS Recruitment System - Sign Up</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sign Up - Nerd.Nerd Recruitment</title>
+        <style>{`
+          body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+          }
+          #__next {
+            height: 100vh;
+            width: 100vw;
+          }
+        `}</style>
       </Head>
-      <div
-        className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center"
-        style={{
-          backgroundImage: "url('/images/ufs-campus-animation.gif')",
-          backgroundColor: "rgba(0, 0, 0, 0.3)",
-          backgroundBlendMode: "overlay",
-        }}
-      >
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-          <div className="flex justify-center mb-6">
-            <Image
-              src="/images/ufs-logo.png"
-              alt="UFS Recruitment System Logo"
-              width={150}
-              height={50}
-              priority
-            />
-          </div>
-          <h1 className="text-3xl font-bold text-center text-blue-800 mb-4">
-            UFS Recruitment System - Sign Up
+
+      <div className="w-[400px] bg-white/10 backdrop-blur-md rounded-xl p-8 flex flex-col items-center">
+        <img
+          src="/images/Logo.png"
+          alt="Nerd.Nerd"
+          className="w-32 mb-6"
+        />
+        
+        {/* Title Section - Fixed Centering */}
+        <div style={{
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          marginBottom: '2rem',
+          position: 'relative',
+          left: '50%',
+          transform: 'translateX(-50%)'
+        }}>
+          <h1 style={{
+            fontSize: '1.875rem',
+            fontWeight: 'bold',
+            color: 'black',
+            width: '100%',
+            textAlign: 'center',
+            margin: '0 auto',
+            display: 'block'
+          }}>
+            Sign Up
           </h1>
-          <p className="text-center text-gray-600 mb-8">
-            Create an account to explore job opportunities at UFS
+          <p style={{
+            color: 'rgba(0, 0, 0, 0.8)',
+            textAlign: 'center',
+            width: '100%',
+            margin: '0.5rem auto 0',
+            display: 'block'
+          }}>
+            Create your account to get started!
           </p>
-          {formState.error && (
-            <p className="text-red-500 text-center mb-4">{formState.error}</p>
-          )}
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="flex space-x-4">
-              <div>
-                <label
-                  htmlFor="firstName"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  First Name
-                </label>
-                <input
-                  id="firstName"
-                  type="text"
-                  value={formState.firstName}
-                  onChange={(e) =>
-                    setFormState((prev) => ({ ...prev, firstName: e.target.value }))
-                  }
-                  className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-800"
-                  placeholder="First Name"
-                  disabled={formState.loading}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="lastName"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Last Name
-                </label>
-                <input
-                  id="lastName"
-                  type="text"
-                  value={formState.lastName}
-                  onChange={(e) =>
-                    setFormState((prev) => ({ ...prev, lastName: e.target.value }))
-                  }
-                  className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-800"
-                  placeholder="Last Name"
-                  disabled={formState.loading}
-                />
-              </div>
-            </div>
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={formState.email}
-                onChange={(e) =>
-                  setFormState((prev) => ({ ...prev, email: e.target.value }))
-                }
-                className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-800"
-                placeholder="student@ufs.ac.za"
-                disabled={formState.loading}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="country"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Country
-              </label>
-              <select
-                id="country"
-                value={formState.country}
-                onChange={(e) =>
-                  setFormState((prev) => ({ ...prev, country: e.target.value }))
-                }
-                className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-800"
-                disabled={formState.loading}
-              >
-                <option value="">Select Country</option>
-                <option value="South Africa">South Africa</option>
-                {/* Add more countries as needed */}
-              </select>
-            </div>
-            <div>
-              <label
-                htmlFor="phone"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Phone
-              </label>
-              <input
-                id="phone"
-                type="tel"
-                value={formState.phone}
-                onChange={(e) =>
-                  setFormState((prev) => ({ ...prev, phone: e.target.value }))
-                }
-                className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-800"
-                placeholder="+27 123 456 789"
-                disabled={formState.loading}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="address"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Address (City, Province, Postal Code)
-              </label>
-              <input
-                id="address"
-                type="text"
-                value={formState.address}
-                onChange={(e) =>
-                  setFormState((prev) => ({ ...prev, address: e.target.value }))
-                }
-                className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-800"
-                placeholder="Bloemfontein, Free State, 9301"
-                disabled={formState.loading}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="dateAvailable"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Date Available
-              </label>
-              <input
-                id="dateAvailable"
-                type="date"
-                value={formState.dateAvailable}
-                onChange={(e) =>
-                  setFormState((prev) => ({ ...prev, dateAvailable: e.target.value }))
-                }
-                className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-800"
-                disabled={formState.loading}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={formState.password}
-                onChange={(e) =>
-                  setFormState((prev) => ({ ...prev, password: e.target.value }))
-                }
-                className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-800"
-                placeholder="Enter your password"
-                disabled={formState.loading}
-              />
-            </div>
+        </div>
+
+        {/* Form with centered inputs */}
+        <form onSubmit={handleSubmit} className="w-full flex flex-col items-center space-y-4">
+          {['username', 'email', 'password', 'confirmPassword'].map((field) => (
+            <input
+              key={field}
+              type={field.includes('password') ? 'password' : field === 'email' ? 'email' : 'text'}
+              placeholder={field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1')}
+              value={formData[field as keyof SignupFormData]}
+              onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+              style={{
+                ...inputStyle,
+                margin: '0 auto',  // Center the input
+                display: 'block'   // Make it a block element
+              }}
+              className="w-full transition-all duration-200 hover:border-white/30 focus:border-white/40"
+            />
+          ))}
+
+          <div style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            margin: '24px 0 0'
+          }}>
             <button
               type="submit"
-              className="w-full bg-purple-600 text-white p-3 rounded-md hover:bg-purple-700 transition duration-200 disabled:bg-purple-400"
-              disabled={formState.loading}
+              style={{
+                width: '66.666667%',  // equivalent to w-2/3
+                padding: '0.75rem',
+                backgroundColor: '#2563eb',
+                color: 'black',
+                borderRadius: '0.5rem',
+                fontWeight: '600',
+                textAlign: 'center',
+                border: 'none',
+                cursor: 'pointer',
+                margin: '0 auto',
+                display: 'block'
+              }}
             >
-              {formState.loading ? "Signing Up..." : "Sign Up"}
+              Create Account
             </button>
-          </form>
-          <p className="mt-6 text-center text-sm text-gray-600">
+          </div>
+        </form>
+
+        {/* Login link - Fixed Centering */}
+        <div style={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: '1.5rem',
+          position: 'relative',
+          left: '50%',
+          transform: 'translateX(-50%)'
+        }}>
+          <p style={{
+            color: 'rgba(0, 0, 0, 0.6)',
+            margin: 0,
+            padding: 0,
+            textAlign: 'center',
+            width: '100%',
+            display: 'block'
+          }}>
             Already have an account?{" "}
-            <a href="/auth/signin" className="text-blue-800 hover:underline">
-              Log in
+            <a 
+              href="/auth/signin" 
+              className="text-black hover:underline"
+              style={{ display: 'inline-block' }}
+            >
+              Login
             </a>
           </p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

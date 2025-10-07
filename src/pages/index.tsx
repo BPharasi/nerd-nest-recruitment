@@ -1,44 +1,102 @@
+// pages/index.tsx (Pages Router)
 import { NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
-import Header from "../components/Header";
 
 const HomePage: NextPage = () => {
   return (
-    <>
+    <div style={{
+      height: '100vh',
+      width: '100vw',
+      margin: 0,
+      padding: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundImage: "url('/images/background.gif')",
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      overflow: 'hidden'
+    }}>
       <Head>
         <title>Nerd.Nerd Recruitment System</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <div
-        className="min-h-screen flex flex-col bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/background.gif')" }}
-      >
-        <Header />
-        <div className="flex-grow flex items-center justify-center p-4">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-            <h1 className="text-3xl font-bold text-center text-blue-800 mb-4">
-              Nerd.Nerd Recruitment System
-            </h1>
-            <p className="text-center text-gray-600 mb-8">
-              Connect with job opportunities at the University of the Free State
-            </p>
-            <div className="flex gap-4 justify-center">
-              <Link href="/auth/signin" legacyBehavior>
-                <a className="flex-1 bg-blue-800 text-white p-3 rounded-md hover:bg-blue-900 transition duration-200 text-center">
-                  Log In
-                </a>
-              </Link>
-              <Link href="/auth/signup" legacyBehavior>
-                <a className="flex-1 bg-blue-800 text-white p-3 rounded-md hover:bg-blue-900 transition duration-200 text-center">
-                  Sign Up
-                </a>
-              </Link>
-            </div>
-          </div>
+
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center',
+        maxWidth: '1200px',
+        padding: '0 20px',
+        margin: '0 auto',
+        textAlign: 'center'
+      }}>
+        <img
+          src="/images/Logo.png"
+          alt="Nerd.Nerd"
+          style={{ width: '600px', marginBottom: '64px' }}
+        />
+        
+        <h1 style={{ 
+          fontSize: '2.5rem', 
+          fontWeight: 'bold', 
+          color: 'black',
+          margin: '0 0 16px 0',
+          padding: 0,
+          width: '100%',
+          textAlign: 'center'
+        }}>
+          Nerd.Nerd Recruitment System
+        </h1>
+        
+        <p style={{ 
+          fontSize: '1.5rem',
+          color: 'black',
+          marginBottom: '48px',
+          width: '100%',
+          textAlign: 'center'
+        }}>
+          Connect with job opportunities at UFS
+        </p>
+
+        <div style={{ 
+          display: 'flex',
+          gap: '32px',
+          justifyContent: 'center'
+        }}>
+          <button
+            onClick={() => window.location.href = '/auth/signin'}
+            style={{
+              backgroundColor: 'white',
+              color: '#4052B8',
+              padding: '10px 64px',
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              borderRadius: '4px',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            Log In
+          </button>
+          <button
+            onClick={() => window.location.href = '/auth/signup'}
+            style={{
+              backgroundColor: 'white',
+              color: '#4052B8',
+              padding: '10px 64px',
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              borderRadius: '4px',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            Sign Up
+          </button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
