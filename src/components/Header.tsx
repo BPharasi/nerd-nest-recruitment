@@ -1,11 +1,24 @@
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 interface HeaderProps {
   className?: string;
 }
 
 const Header = ({ className = "" }: HeaderProps) => {
+  const { data: session } = useSession();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null; // or a skeleton loader
+  }
+
   return (
     <header
       className={`bg-white py-4 shadow-md ${className}`}

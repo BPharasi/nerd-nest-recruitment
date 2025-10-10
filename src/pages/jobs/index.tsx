@@ -21,6 +21,7 @@ import {
 import { useSession } from "next-auth/react";
 import { jobs, internships } from '@/data/mockData';
 import { Job, Internship, Position } from '@/types/jobs';
+import { useRouter } from 'next/router';
 
 const TaskCard = ({ title, description, location, assignee, icon, type = "default" }: any) => (
   <div className="card">
@@ -103,6 +104,12 @@ const JobOpeningsPage: NextPage = () => {
   const [filteredItems, setFilteredItems] = useState<Position[]>(jobs);
   const [selectedItems, setSelectedItems] = useState<Position[]>(jobs);
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     const items = activeTab === 'jobs' ? jobs : internships;
@@ -124,6 +131,10 @@ const JobOpeningsPage: NextPage = () => {
 
   const handleStartSearch = () => {
     setShowSearchResults(true);
+  };
+
+  const handleApply = (jobId: number) => {
+    router.push(`/jobs/apply?id=${jobId}`);
   };
 
   const navigationGroups = [
@@ -150,6 +161,10 @@ const JobOpeningsPage: NextPage = () => {
       ]
     }
   ];
+
+  if (!isClient) {
+    return null; // or a loading spinner
+  }
 
   return (
     <div style={{ height: '100vh', width: '100vw', overflow: 'hidden', background: '#f9fafb' }}>
@@ -283,7 +298,7 @@ const JobOpeningsPage: NextPage = () => {
               <div className="card bg-[#003B73] text-white">
                 <div className="max-w-2xl">
                   <h1 className="text-3xl font-bold !m-0 !p-0">
-                    Land a better job faster! 👋 Welcome, Bophelo!
+                    Land a better job faster! 👋 Welcome, {session?.user?.name || 'Student'}!
                   </h1>
                   <p className="text-lg opacity-90 my-4 !m-0">
                     Benefit from expert support and feedback during every step of
@@ -343,7 +358,7 @@ const JobOpeningsPage: NextPage = () => {
                       key={item.id}
                       className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col"
                     >
-                      {/* Card Header with Company & Salary */}
+                      {/* Card Header */}
                       <div className="p-6 bg-gray-50 border-b border-gray-100">
                         <div className="flex justify-between items-start gap-4">
                           <div>
@@ -403,6 +418,7 @@ const JobOpeningsPage: NextPage = () => {
                             Deadline: {new Date(item.applicationDeadline).toLocaleDateString()}
                           </span>
                           <button 
+                            onClick={() => handleApply(item.id)}
                             className="bg-[#003B73] hover:bg-[#002855] text-white px-6 py-2 rounded-lg text-sm font-medium transition-colors"
                           >
                             Apply Now

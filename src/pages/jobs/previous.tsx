@@ -1,42 +1,51 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import Header from "@/components/Header";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
-import {
+import { 
+  FaMapMarkerAlt, 
+  FaCalendarAlt, 
+  FaArrowLeft,
   FaUser,
   FaFileAlt,
   FaSearch,
   FaClipboardList,
   FaVideo,
   FaTrophy,
-  FaBell,
-  FaMapMarkerAlt,
-  FaBuilding,
-  FaClock,
-  FaArrowLeft
+  FaBell 
 } from "react-icons/fa";
+import Link from "next/link";
+import { useState } from "react";
 
-// Mock job detail data (replace with API fetch)
-const mockJobDetail = {
-  title: "Brand Designer",
-  department: "Design Team",
-  location: "Zagreb, Grad Zagreb",
-  workPlace: "Zagreb Office",
-  employmentType: "Full-Time",
-  minExperience: "Mid-level",
-  about: "Company.name is a leading provider of advanced sports insights...",
-  role: "Exciting new things ahead for our Design Team...",
-  // Add full text from the design
-};
+// Mock data for previous searches
+const previousSearches = [
+  {
+    id: 1,
+    searchDate: "2024-01-15",
+    query: "Software Developer",
+    filters: {
+      location: "Cape Town",
+      type: "Full-time",
+      experience: "Entry Level"
+    },
+    results: 12
+  },
+  {
+    id: 2,
+    searchDate: "2024-01-10",
+    query: "Data Analyst Intern",
+    filters: {
+      location: "Johannesburg",
+      type: "Internship",
+      experience: "Student"
+    },
+    results: 8
+  }
+];
 
-const JobDetailPage: NextPage = () => {
+const PreviousSearches: NextPage = () => {
   const { data: session } = useSession();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const router = useRouter();
-  const { id } = router.query;
 
   const navigationGroups = [
     {
@@ -66,7 +75,7 @@ const JobDetailPage: NextPage = () => {
   return (
     <div style={{ height: '100vh', width: '100vw', overflow: 'hidden', background: '#f9fafb' }}>
       <Head>
-        <title>{mockJobDetail.title} - UFS Recruitment</title>
+        <title>Previous Job Searches - UFS Recruitment</title>
       </Head>
 
       {/* Fixed Height Header */}
@@ -182,83 +191,70 @@ const JobDetailPage: NextPage = () => {
         padding: '2rem',
         background: '#f9fafb'
       }}>
-        <div className="max-w-4xl mx-auto">
-          {/* Back Button */}
-          <Link 
-            href="/jobs" 
-            className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-6"
-          >
-            <FaArrowLeft className="mr-2" />
-            Back to Job Openings
-          </Link>
-
-          {/* Job Details Card */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-            {/* Header Section */}
-            <div className="p-6 bg-[#003B73] text-white">
-              <h1 className="text-3xl font-bold mb-4">{mockJobDetail.title}</h1>
-              <div className="flex items-center gap-4 text-gray-100">
-                <div className="flex items-center">
-                  <FaBuilding className="mr-2" />
-                  {mockJobDetail.department}
-                </div>
-                <div className="flex items-center">
-                  <FaMapMarkerAlt className="mr-2" />
-                  {mockJobDetail.location}
-                </div>
+        <div className="max-w-7xl mx-auto">
+          <div className="space-y-8">
+            {/* Back Button and Title */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <Link 
+                  href="/jobs" 
+                  className="inline-flex items-center text-gray-600 hover:text-gray-900"
+                >
+                  <FaArrowLeft className="mr-2" />
+                  Back to Jobs
+                </Link>
+                <h1 className="text-2xl font-bold text-gray-900">Previous Job Searches</h1>
               </div>
             </div>
 
-            {/* Details Grid */}
-            <div className="grid grid-cols-2 gap-6 p-6 border-b border-gray-100 bg-gray-50">
-              <div className="flex items-center gap-2">
-                <FaMapMarkerAlt className="text-gray-400" />
-                <div>
-                  <p className="text-sm text-gray-500">Location</p>
-                  <p className="font-medium">{mockJobDetail.location}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaBuilding className="text-gray-400" />
-                <div>
-                  <p className="text-sm text-gray-500">Department</p>
-                  <p className="font-medium">{mockJobDetail.department}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaClock className="text-gray-400" />
-                <div>
-                  <p className="text-sm text-gray-500">Employment Type</p>
-                  <p className="font-medium">{mockJobDetail.employmentType}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaUser className="text-gray-400" />
-                <div>
-                  <p className="text-sm text-gray-500">Experience Level</p>
-                  <p className="font-medium">{mockJobDetail.minExperience}</p>
-                </div>
-              </div>
-            </div>
+            {/* Search History Cards */}
+            <div className="grid grid-cols-1 gap-4">
+              {previousSearches.map((search) => (
+                <div 
+                  key={search.id}
+                  className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
+                >
+                  <div className="p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2">{search.query}</h3>
+                        <div className="flex items-center gap-4 text-sm text-gray-500">
+                          <div className="flex items-center">
+                            <FaCalendarAlt className="mr-2" />
+                            {new Date(search.searchDate).toLocaleDateString()}
+                          </div>
+                          <div className="flex items-center">
+                            <FaMapMarkerAlt className="mr-2" />
+                            {search.filters.location}
+                          </div>
+                        </div>
+                      </div>
+                      <span className="bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
+                        {search.results} results
+                      </span>
+                    </div>
 
-            {/* Content Sections */}
-            <div className="p-6 space-y-8">
-              <section>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">About the Company</h2>
-                <p className="text-gray-600 leading-relaxed">{mockJobDetail.about}</p>
-              </section>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {Object.entries(search.filters).map(([key, value]) => (
+                        <span 
+                          key={key}
+                          className="px-3 py-1 bg-gray-50 text-gray-600 rounded-full text-sm"
+                        >
+                          {value}
+                        </span>
+                      ))}
+                    </div>
 
-              <section>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">About the Role</h2>
-                <p className="text-gray-600 leading-relaxed">{mockJobDetail.role}</p>
-              </section>
-
-              {/* Apply Button */}
-              <div className="flex justify-end pt-4">
-                <button className="bg-[#003B73] text-white px-8 py-3 rounded-lg font-medium hover:bg-[#002855] transition-colors">
-                  Apply Now
-                </button>
-              </div>
+                    <div className="flex justify-end">
+                      <button 
+                        className="bg-[#003B73] text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#002855] transition-colors"
+                      >
+                        View Results
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -267,4 +263,4 @@ const JobDetailPage: NextPage = () => {
   );
 };
 
-export default JobDetailPage;
+export default PreviousSearches;
