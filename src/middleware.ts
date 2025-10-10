@@ -7,9 +7,29 @@ export default withAuth(
     const token = req.nextauth.token;
     const path = req.nextUrl.pathname;
 
-    // Protect student dashboard routes
-    if (path.startsWith("/dashboard/student") && token?.role !== "Student") {
+    // If no token, redirect to sign in
+    if (!token) {
       return NextResponse.redirect(new URL("/auth/signin", req.url));
+    }
+
+    // Protect role-specific dashboard routes
+    if (path.startsWith("/dashboard/student") && token.role !== "Student") {
+      return NextResponse.redirect(new URL("/dashboard/" + token.role?.toLowerCase(), req.url));
+    }
+
+    if (path.startsWith("/dashboard/employer") && token.role !== "Employer") {
+      return NextResponse.redirect(new URL("/dashboard/" + token.role?.toLowerCase(), req.url));
+    }
+
+    if (path.startsWith("/dashboard/admin") && token.role !== "Admin") {
+      return NextResponse.redirect(new URL("/dashboard/" + token.role?.toLowerCase(), req.url));
+    }
+
+    // If accessing /dashboard, redirect to role-specific dashboard
+    if (path === "/dashboard") {
+      return NextResponse.redirect(
+        new URL(`/dashboard/${token.role?.toLowerCase()}`, req.url)
+      );
     }
 
     return NextResponse.next();
@@ -22,5 +42,8 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: [
+    "/dashboard",
+    "/dashboard/:path*",
+  ],
 };

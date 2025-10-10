@@ -67,8 +67,8 @@ const HomePage: NextPage = () => {
           <button
             onClick={() => window.location.href = '/auth/signin'}
             style={{
-              backgroundColor: 'white',
-              color: '#4052B8',
+              backgroundColor: 'rgba(0, 128, 128, 0.5)',
+              color: '#193C64',
               padding: '10px 64px',
               fontSize: '1.25rem',
               fontWeight: '600',
@@ -82,8 +82,8 @@ const HomePage: NextPage = () => {
           <button
             onClick={() => window.location.href = '/auth/signup'}
             style={{
-              backgroundColor: 'white',
-              color: '#4052B8',
+              backgroundColor: 'rgba(0, 128, 128, 0.5)',
+              color: '#193C64',
               padding: '10px 64px',
               fontSize: '1.25rem',
               fontWeight: '600',

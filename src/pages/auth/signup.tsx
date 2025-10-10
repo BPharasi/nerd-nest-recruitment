@@ -45,15 +45,15 @@ const SignupPage: NextPage = () => {
   };
 
   const inputStyle = {
-    width: '100%',
-    padding: '0.875rem',
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
-    borderRadius: '0.5rem',
-    color: 'white',
-    fontSize: '1rem',
-    textAlign: 'center' as const,
-  };
+  width: '50%',
+  padding: '0.875rem',
+  background: 'linear-gradient(135deg, rgba(0, 128, 128, 0.2) 0%, rgba(0, 191, 255, 0.3) 100%)',
+  border: '1px solid rgba(0, 191, 255, 0.3)',
+  borderRadius: '0.5rem',
+  color: 'black',
+  fontSize: '1rem',
+  textAlign: 'center' as const,
+};
 
   return (
     <div 
@@ -154,9 +154,9 @@ const SignupPage: NextPage = () => {
             <button
               type="submit"
               style={{
-                width: '66.666667%',  // equivalent to w-2/3
+                width: '40%',  // equivalent to w-2/3
                 padding: '0.75rem',
-                backgroundColor: '#2563eb',
+                backgroundColor: 'rgba(0, 128, 128, 0.5)',
                 color: 'black',
                 borderRadius: '0.5rem',
                 fontWeight: '600',

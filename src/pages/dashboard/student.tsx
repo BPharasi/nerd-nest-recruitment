@@ -12,7 +12,11 @@ import {
   FaClipboardList, 
   FaVideo, 
   FaTrophy, 
-  FaBell 
+  FaBell,
+  FaChevronLeft,
+  FaChevronRight,
+  FaUsers,
+  FaStar
 } from 'react-icons/fa';
 
 interface NavItem {
@@ -26,6 +30,53 @@ interface NavGroup {
   items: NavItem[];
 }
 
+const skillChallenges = [
+  {
+    id: 1,
+    title: "Generative AI",
+    description: "Power up your AI career with expert-led learning",
+    students: "1M+",
+    image: "/images/ai-course.jpg",
+    level: "Beginner"
+  },
+  {
+    id: 2,
+    title: "IT Certifications",
+    description: "Advance your career with in-demand certifications",
+    students: "14.4M+",
+    image: "/images/it-cert.jpg",
+    level: "Intermediate"
+  },
+  // Add more skill challenges as needed
+];
+
+const achievedBadges = [
+  {
+    id: 1,
+    name: "Python Master",
+    icon: "🐍",
+    level: "Advanced",
+    earnedDate: "2023-12-01",
+    color: "bg-blue-500"
+  },
+  {
+    id: 2,
+    name: "Web Development",
+    icon: "🌐",
+    level: "Intermediate",
+    earnedDate: "2023-11-15",
+    color: "bg-green-500"
+  },
+  {
+    id: 3,
+    name: "Data Analysis",
+    icon: "📊",
+    level: "Beginner",
+    earnedDate: "2023-10-30",
+    color: "bg-purple-500"
+  }
+];
+
 const StudentDashboard: NextPage = () => {
   const { data: session } = useSession();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -34,7 +85,7 @@ const StudentDashboard: NextPage = () => {
     {
       title: "Profile",
       items: [
-        { href: "/dashboard/student/profile", label: "Profile Setup", icon: <FaUser /> },
+        { href: "/dashboard/student/Profile", label: "Profile Setup", icon: <FaUser /> },
         { href: "/dashboard/student/resume-builder", label: "Create CV", icon: <FaFileAlt /> },
       ]
     },
@@ -75,21 +126,22 @@ const StudentDashboard: NextPage = () => {
         <Header />
       </header>
 
-      {/* Left Navigation - Fixed Width Like VS Code Explorer */}
+      {/* Left Navigation */}
       <aside 
         style={{ 
           position: 'absolute',
-          top: '64px',
+          top: '75px',
           bottom: 0,
           left: 0,
           width: '256px',
           overflowY: 'auto',
-          background: 'linear-gradient(to bottom, #26A69A, #00BCD4)'
+          background: 'linear-gradient(to bottom, #26A69A, #00BCD4)',
+          padding: '1rem'
         }}
         className={`${isSidebarOpen ? 'block' : 'hidden md:block'}`}
       >
         {/* Profile Avatar Section - Perfectly Centered */}
-        <div className="relative" style={{ height: '180px', width: '256px' }}>
+        <div className="relative mb-8" style={{ height: '180px', width: '100%' }}>
           <div 
             style={{
               position: 'absolute',
@@ -131,54 +183,154 @@ const StudentDashboard: NextPage = () => {
         </div>
 
         {/* Navigation Groups */}
-        <div className="mt-2 px-2">
+        <div className="space-y-4">
           {navigationGroups.map((group, groupIndex) => (
-            <div key={groupIndex} className="mb-4">
-              <div className="px-4 py-2 text-sm font-semibold text-white uppercase tracking-wider">
+            <div key={groupIndex} className="mb-6">
+              <div className="px-4 py-2 text-sm font-semibold text-white uppercase tracking-wider mb-3">
                 {group.title}
               </div>
-              <ul>
+              <div className="space-y-2">
                 {group.items.map((item, index) => (
-                  <li key={index}>
-                    <Link 
-                      href={item.href}
-                      className="flex items-center px-4 py-2 text-white hover:bg-[#283593] hover:text-white transition-all duration-150 gap-3"
+                  <Link
+                    key={index}
+                    href={item.href}
+                    className="block"
+                  >
+                    <div 
+                      style={{
+                        background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))",
+                        backdropFilter: "blur(8px)",
+                        border: "1px solid rgba(255, 255, 255, 0.1)",
+                      }}
+                      className="px-4 py-3 rounded-lg hover:bg-white/20 transition-all duration-300 flex items-center gap-3"
                     >
-                      <span className="text-lg">{item.icon}</span>
-                      <span>{item.label}</span>
-                    </Link>
-                  </li>
+                      <span className="text-lg text-white">{item.icon}</span>
+                      <span className="text-white font-medium">{item.label}</span>
+                    </div>
+                  </Link>
                 ))}
-              </ul>
+              </div>
             </div>
           ))}
         </div>
       </aside>
 
-      {/* Main Content Area - Like VS Code Editor */}
+      {/* Main Content Area */}
       <main 
         style={{
           position: 'absolute',
-          top: '64px',
+          top: '75px',
           right: 0,
           bottom: 0,
           left: '256px',
           overflowY: 'auto',
-          background: 'linear-gradient(135deg, #FFFFFF 0%, #4DB6AC 100%)', // Lighter teal (#4DB6AC)
-          padding: '2rem'
+          padding: '2rem',
+          backgroundImage: "url('/images/skills_background(1).png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed'
         }}
       >
-        <div className="h-full p-6 rounded-lg bg-white/50 backdrop-blur-sm">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-3xl font-bold text-[#26A69A] mb-6">
-              Welcome Back, {session?.user?.name || "Student"}!
-            </h1>
-            <div className="bg-white rounded-lg shadow-lg p-6 border border-[#4DB6AC]/20">
-              <p className="text-[#424242]">
-                Select an option from the sidebar to manage your recruitment journey.
-              </p>
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Hero Section */}
+          <section className="mb-10">
+            <div className="bg-gradient-to-r from-teal-600 to-cyan-600 rounded-xl p-6 text-white">
+              <h1 className="text-4xl font-bold mb-4">Master tomorrow's skills today</h1>
+              <p className="text-lg mb-6 text-teal-50">Power up your AI, career, and life skills with the most up-to-date, expert-led learning.</p>
+              <button className="bg-white text-teal-700 px-6 py-2 rounded-lg font-semibold hover:bg-teal-50 transition-colors">
+                Get started
+              </button>
             </div>
-          </div>
+          </section>
+
+          {/* Skills Challenges Section */}
+          <section className="mb-12">
+            <div className="bg-gradient-to-br from-teal-500/10 to-cyan-500/10 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-white">Learn essential career and life skills</h2>
+                <div className="flex gap-2">
+                  <button className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white">
+                    <FaChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white">
+                    <FaChevronRight className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {skillChallenges.map((challenge) => (
+                  <div
+                    key={challenge.id}
+                    style={{
+                      background: "linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(6, 182, 212, 0.2))",
+                      backdropFilter: "blur(8px)",
+                      border: "1px solid rgba(20, 184, 166, 0.3)",
+                    }}
+                    className="rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
+                  >
+                    <div className="aspect-video relative overflow-hidden">
+                      <img
+                        src={challenge.image}
+                        alt={challenge.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="p-5">
+                      <h3 className="text-xl font-semibold mb-2 text-white">{challenge.title}</h3>
+                      <p className="text-teal-50 mb-4">{challenge.description}</p>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="flex items-center text-teal-100">
+                          <FaUsers className="mr-2" />
+                          {challenge.students} students
+                        </span>
+                        <span className="text-cyan-100 font-medium">
+                          {challenge.level}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Achievement Badges Section */}
+          <section className="mb-12">
+            <div className="bg-gradient-to-br from-teal-500/10 to-cyan-500/10 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-white">Your Achievement Badges</h2>
+                <Link href="/dashboard/student/achievements" className="text-teal-100 hover:text-white font-medium transition-colors">
+                  View All
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {achievedBadges.map((badge) => (
+                  <div
+                    key={badge.id}
+                    style={{
+                      background: "linear-gradient(135deg, rgba(167, 123, 202, 0.2), rgba(124, 58, 237, 0.2))",
+                      backdropFilter: "blur(8px)",
+                      border: "1px solid rgba(20, 184, 166, 0.3)",
+                    }}
+                    className="rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center"
+                  >
+                    <div className={`${badge.color} w-16 h-16 rounded-full flex items-center justify-center text-3xl mb-3 text-white`}>
+                      {badge.icon}
+                    </div>
+                    <h3 className="font-semibold text-white mb-1">{badge.name}</h3>
+                    <span className="text-sm text-teal-100 mb-2">{badge.level}</span>
+                    <div className="flex items-center text-xs text-teal-100">
+                      <FaStar className="text-yellow-400 mr-1" />
+                      Earned {new Date(badge.earnedDate).toLocaleDateString()}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
         </div>
       </main>
     </div>
