@@ -34,7 +34,7 @@ const Header = ({ className = "" }: HeaderProps) => {
         style={{ display: "flex", justifyContent: "center" }}
       >
         <Image
-          src="/images/logo.png"
+          src="/images/Logo.png"
           alt="Nerd.Next Logo"
           width={300}
           height={75}
