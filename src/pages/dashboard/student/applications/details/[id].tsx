@@ -1,10 +1,10 @@
 import { NextPage } from "next";
-import { useRouter } from "next/router";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import Header from "@/components/Header";
 import { useState, useEffect } from "react";
+import Header from "@/components/Header";
 import { 
   FaArrowLeft, 
   FaMapMarkerAlt, 
@@ -19,7 +19,7 @@ import {
   FaBell 
 } from "react-icons/fa";
 
-// Import the mock data
+// Mock application data
 const applications = [
   {
     id: 1,
@@ -44,14 +44,14 @@ const applications = [
       submittedDate: "2024-01-15T10:30:00Z"
     }
   },
-  // ... other applications from your mock data
+  // Add other applications as needed
 ];
 
 const ApplicationDetailsPage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const [application, setApplication] = useState<any>(null);
   const { data: session } = useSession();
+  const [application, setApplication] = useState<any>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const navigationGroups = [
@@ -81,7 +81,6 @@ const ApplicationDetailsPage: NextPage = () => {
 
   useEffect(() => {
     if (id) {
-      // Find the application in our mock data
       const found = applications.find(app => app.id === Number(id));
       if (found) {
         setApplication(found);
