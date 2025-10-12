@@ -1,12 +1,11 @@
-
 import type { NextApiRequest, NextApiResponse } from "next";
 import { unstable_getServerSession } from "next-auth/next";
-import { authOptions } from "./auth/[...nextauth]";
+import { authOptions } from "../../lib/auth-options";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session = await unstable_getServerSession(req, res, authOptions);
 
-  if (!session || session.user?.role !== "student") {
+  if (!session || session.user?.role !== "Student") {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
