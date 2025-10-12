@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 
 export default function SignIn() {
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -18,13 +18,13 @@ export default function SignIn() {
 
     try {
       const result = await signIn('credentials', {
-        username,
+        username: email, // NextAuth expects 'username' but we'll pass the email
         password,
         redirect: false,
       })
 
       if (result?.error) {
-        setError('Invalid username or password')
+        setError('Invalid email or password')
       } else if (result?.ok) {
         // Redirect to dashboard on successful login
         router.push('/dashboard')
@@ -129,12 +129,13 @@ export default function SignIn() {
             gap: '1rem'
           }}>
             <input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              placeholder="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               style={inputStyle}
               className="w-full max-w-[18.75rem]"
+              required
             />
             <input
               type="password"
@@ -143,6 +144,7 @@ export default function SignIn() {
               onChange={(e) => setPassword(e.target.value)}
               style={inputStyle}
               className="w-full max-w-[18.75rem]"
+              required
             />
           </div>
 
@@ -178,6 +180,40 @@ export default function SignIn() {
             </button>
           </div>
         </form>
+
+        {/* Test Credentials Section */}
+        <div style={{
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginTop: '1.5rem',
+          padding: '1rem',
+          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          borderRadius: '0.5rem'
+        }}>
+          <p style={{
+            color: 'rgba(0, 0, 0, 0.8)',
+            margin: 0,
+            padding: 0,
+            textAlign: 'center',
+            fontSize: '0.875rem',
+            fontWeight: '600',
+            marginBottom: '0.5rem'
+          }}>
+            Test Credentials:
+          </p>
+          <div style={{
+            fontSize: '0.75rem',
+            color: 'rgba(0, 0, 0, 0.7)',
+            textAlign: 'left',
+            lineHeight: '1.4'
+          }}>
+            <div>• Student: student@ufs.ac.za / student123</div>
+            <div>• Employer: employer@company.com / employer123</div>
+            <div>• Admin: admin@ufs.ac.za / admin123</div>
+          </div>
+        </div>
 
         <div style={{
           width: '100%',
