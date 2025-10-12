@@ -77,7 +77,7 @@ const HomePage: NextPage = () => {
               cursor: 'pointer'
             }}
           >
-            Log In
+            Sign In
           </button>
           <button
             onClick={() => window.location.href = '/auth/signup'}
