@@ -74,12 +74,42 @@ const achievedBadges = [
     level: "Beginner",
     earnedDate: "2023-10-30",
     color: "bg-purple-500"
+  },
+  // New badges from skills challenges
+  {
+    id: 4,
+    name: "Excellence Award",
+    icon: "🏆",
+    level: "Advanced",
+    earnedDate: "2024-01-25",
+    color: "bg-yellow-500"
+  },
+  {
+    id: 5,
+    name: "React Master",
+    icon: "⚛️",
+    level: "Intermediate",
+    earnedDate: "2024-01-20",
+    color: "bg-cyan-500"
   }
 ];
 
 const StudentDashboard: NextPage = () => {
   const { data: session } = useSession();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      type: 'interview_offer',
+      title: 'Interview Opportunity! 🎉',
+      message: 'Congratulations! You\'ve been selected for an interview based on your excellent performance in the "Build a React E-commerce Component" challenge.',
+      challengeTitle: 'Build a React E-commerce Component',
+      companyName: 'TechNova Solutions',
+      createdAt: '2024-01-25',
+      read: false,
+      actionRequired: true
+    }
+  ]);
 
   const navigationGroups: NavGroup[] = [
     {
@@ -296,17 +326,70 @@ const StudentDashboard: NextPage = () => {
             </div>
           </section>
 
-          {/* Achievement Badges Section */}
+          {/* Notifications Section - Add this before Achievement Badges */}
+          {notifications.length > 0 && (
+            <section className="mb-12">
+              <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-green-200/20">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-white">🔔 Recent Notifications</h2>
+                  <Link href="/dashboard/student/notifications" className="text-green-100 hover:text-white font-medium transition-colors">
+                    View All
+                  </Link>
+                </div>
+
+                <div className="space-y-4">
+                  {notifications.filter(n => !n.read).slice(0, 2).map((notification) => (
+                    <div
+                      key={notification.id}
+                      style={{
+                        background: notification.type === 'interview_offer' 
+                          ? "linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(16, 185, 129, 0.2))"
+                          : "linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))",
+                        backdropFilter: "blur(8px)",
+                        border: "1px solid rgba(34, 197, 94, 0.3)",
+                      }}
+                      className="rounded-xl p-6 shadow-lg"
+                    >
+                      <div className="flex justify-between items-start mb-3">
+                        <h3 className="font-semibold text-white text-lg">{notification.title}</h3>
+                        <span className="text-xs text-green-100 bg-green-400/20 px-3 py-1 rounded-full">
+                          {new Date(notification.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <p className="text-green-50 mb-4">{notification.message}</p>
+                      {notification.challengeTitle && (
+                        <div className="text-sm text-green-100 mb-4">
+                          <span className="font-medium">Challenge:</span> {notification.challengeTitle}
+                        </div>
+                      )}
+                      {notification.actionRequired && (
+                        <div className="flex gap-3">
+                          <button className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                            Accept Interview
+                          </button>
+                          <button className="border border-green-300 text-green-100 hover:bg-green-400/20 px-6 py-2 rounded-lg font-medium transition-colors">
+                            View Details
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Achievement Badges Section - Updated to show new badges */}
           <section className="mb-12">
             <div className="bg-gradient-to-br from-teal-500/10 to-cyan-500/10 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-white">Your Achievement Badges</h2>
+                <h2 className="text-2xl font-bold text-white">🏆 Your Achievement Badges</h2>
                 <Link href="/dashboard/student/achievements" className="text-teal-100 hover:text-white font-medium transition-colors">
-                  View All
+                  View All ({achievedBadges.length})
                 </Link>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 {achievedBadges.map((badge) => (
                   <div
                     key={badge.id}
@@ -315,16 +398,16 @@ const StudentDashboard: NextPage = () => {
                       backdropFilter: "blur(8px)",
                       border: "1px solid rgba(20, 184, 166, 0.3)",
                     }}
-                    className="rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center"
+                    className="rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center group hover:scale-105"
                   >
-                    <div className={`${badge.color} w-16 h-16 rounded-full flex items-center justify-center text-3xl mb-3 text-white`}>
+                    <div className={`${badge.color} w-16 h-16 rounded-full flex items-center justify-center text-3xl mb-3 text-white group-hover:scale-110 transition-transform`}>
                       {badge.icon}
                     </div>
-                    <h3 className="font-semibold text-white mb-1">{badge.name}</h3>
-                    <span className="text-sm text-teal-100 mb-2">{badge.level}</span>
+                    <h3 className="font-semibold text-white mb-1 text-sm">{badge.name}</h3>
+                    <span className="text-xs text-teal-100 mb-2">{badge.level}</span>
                     <div className="flex items-center text-xs text-teal-100">
                       <FaStar className="text-yellow-400 mr-1" />
-                      Earned {new Date(badge.earnedDate).toLocaleDateString()}
+                      {new Date(badge.earnedDate).toLocaleDateString()}
                     </div>
                   </div>
                 ))}

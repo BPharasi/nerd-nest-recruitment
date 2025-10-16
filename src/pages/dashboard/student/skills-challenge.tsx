@@ -374,7 +374,33 @@ const StudentSkillsChallengesPage: NextPage = () => {
                           <FaClock className="mr-2" />
                           <span>{challenge.timeLimit} minutes</span>
                         </div>
-                        <button className="bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-6 py-2 rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all duration-300 shadow-md hover:shadow-lg">
+                        <button 
+                          style={{
+                            background: 'linear-gradient(135deg, #64748b, #475569)',
+                            color: 'white',
+                            padding: '16px 32px',
+                            borderRadius: '16px',
+                            fontSize: '18px',
+                            fontWeight: '600',
+                            border: 'none',
+                            cursor: 'pointer',
+                            boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+                            transition: 'all 0.3s ease',
+                            minWidth: '200px',
+                            letterSpacing: '0.5px'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = 'linear-gradient(135deg, #475569, #334155)';
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = '0 12px 20px rgba(0, 0, 0, 0.3)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'linear-gradient(135deg, #64748b, #475569)';
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)';
+                          }}
+                          className="hover:shadow-xl transition-all duration-300"
+                        >
                           Start Challenge
                         </button>
                       </div>
