@@ -14,7 +14,7 @@ import {
   FaBell,
   FaClock,
   FaTools,
-  FaHome, // Add this import
+  FaHome,
 } from "react-icons/fa";
 
 interface Badge {
@@ -46,48 +46,30 @@ const StudentSkillsChallengesPage: NextPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  // Consistent navigation groups for all student pages
   const navigationGroups = [
     {
       title: "Profile",
       items: [
-        {
-          href: "/dashboard/student/profile",
-          label: "Profile Setup",
-          icon: <FaUser />,
-        },
+        { href: "/dashboard/student/Profile", label: "Profile Setup", icon: <FaUser /> },
         { href: "/dashboard/student/resume-builder", label: "Create CV", icon: <FaFileAlt /> },
-      ],
+      ]
     },
     {
-      title: "Challenges",
+      title: "Job Search",
       items: [
-        {
-          href: "/dashboard/student/skills-challenge",
-          label: "Skills Challenges",
-          icon: <FaClipboardList />,
-        },
-        {
-          href: "/dashboard/student/technical-interview",
-          label: "Technical Interview",
-          icon: <FaVideo />,
-        },
-      ],
+        { href: "/jobs", label: "Job Search & Matching", icon: <FaSearch /> },
+        { href: "/dashboard/student/applications", label: "Applications", icon: <FaClipboardList /> },
+        { href: "/dashboard/student/interviews", label: "Interviews", icon: <FaVideo /> },
+      ]
     },
     {
-      title: "Resources",
+      title: "Activities",
       items: [
-        {
-          href: "/dashboard/student/learning-resources",
-          label: "Learning Resources",
-          icon: <FaSearch />,
-        },
-        {
-          href: "/dashboard/student/faq",
-          label: "FAQ",
-          icon: <FaBell />,
-        },
-      ],
-    },
+        { href: "/dashboard/student/skills-challenge", label: "Skills Challenges", icon: <FaTrophy /> },
+        { href: "/dashboard/student/notifications", label: "Notifications", icon: <FaBell /> },
+      ]
+    }
   ];
 
   useEffect(() => {
@@ -216,7 +198,7 @@ const StudentSkillsChallengesPage: NextPage = () => {
 
         {/* Navigation */}
         <div className="space-y-4">
-          {/* Add Home Link */}
+          {/* Home Link */}
           <div className="mb-6">
             <Link
               href="/dashboard/student"
@@ -231,12 +213,10 @@ const StudentSkillsChallengesPage: NextPage = () => {
                 className="px-4 py-3 rounded-lg hover:bg-white/20 transition-all duration-300 flex items-center gap-3"
               >
                 <span className="text-xl text-white"><FaHome /></span>
-                <span className="text-white font-medium">Home</span>
+                <span className="text-white font-medium">Dashboard Home</span>
               </div>
             </Link>
           </div>
-
-          {/* Existing Navigation Groups */}
           {navigationGroups.map((group, groupIndex) => (
             <div key={groupIndex} className="mb-6">
               <div className="px-4 py-2 text-sm font-semibold text-white uppercase tracking-wider mb-3">

@@ -96,6 +96,12 @@ interface JobPosting {
   postedDate: string;
 }
 
+interface AcademicTranscriptRequest {
+  applicantId: string;
+  status: "none" | "pending" | "approved" | "rejected";
+  transcriptUrl?: string;
+}
+
 // Mock data
 const mockJobPostings: JobPosting[] = [
   {
@@ -220,6 +226,11 @@ const mockJobPostings: JobPosting[] = [
   },
 ];
 
+const mockTranscriptRequests: AcademicTranscriptRequest[] = [
+  { applicantId: "1", status: "approved", transcriptUrl: "/transcripts/john-smith-transcript.txt" },
+  { applicantId: "2", status: "pending" }
+];
+
 const EmployerApplicationsPage: NextPage = () => {
   const { data: session } = useSession();
   const [selectedJob, setSelectedJob] = useState<JobPosting>(mockJobPostings[0]);
@@ -228,6 +239,7 @@ const EmployerApplicationsPage: NextPage = () => {
   const [sortBy, setSortBy] = useState<"date" | "rating" | "name">("date");
   const [showInterviewModal, setShowInterviewModal] = useState(false);
   const [interviewDateTime, setInterviewDateTime] = useState("");
+  const [transcriptRequests, setTranscriptRequests] = useState<AcademicTranscriptRequest[]>(mockTranscriptRequests);
 
   const navigationGroups = [
     {
@@ -305,6 +317,21 @@ const EmployerApplicationsPage: NextPage = () => {
       console.error("Failed to close job posting:", error);
     }
   };
+
+  const handleRequestTranscript = async (applicantId: string) => {
+    setTranscriptRequests((prev) => {
+      // If already requested, do nothing
+      if (prev.some(r => r.applicantId === applicantId && r.status !== "none")) return prev;
+      return [...prev, { applicantId, status: "pending" }];
+    });
+    // In real app, POST to /api/employer/academic-requests
+    // await fetch("/api/employer/academic-requests", { method: "POST", body: JSON.stringify({ applicantId }) });
+    alert("Transcript request sent to admin for approval.");
+  };
+
+  // Get transcript request status for an applicant
+  const getTranscriptRequest = (applicantId: string) =>
+    transcriptRequests.find(r => r.applicantId === applicantId) || { status: "none" };
 
   const filteredApplicants = selectedJob.applicants
     .filter((app) => filterStatus === "all" || app.status === filterStatus)
@@ -603,320 +630,357 @@ const EmployerApplicationsPage: NextPage = () => {
 
           {/* Applications Grid - Updated to individual cards */}
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {filteredApplicants.map((applicant) => (
-              <div
-                key={applicant.id}
-                style={{
-                  background: "linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(6, 182, 212, 0.2))",
-                  backdropFilter: "blur(8px)",
-                  border: "1px solid rgba(20, 184, 166, 0.3)",
-                }}
-                className="rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
-              >
-                {/* Status Banner */}
+            {filteredApplicants.map((applicant) => {
+              const transcriptReq = getTranscriptRequest(applicant.id);
+              return (
                 <div
-                  className={`w-full h-3 ${
-                    applicant.status === "pending"
-                      ? "bg-yellow-500"
-                      : applicant.status === "reviewed"
-                      ? "bg-blue-500"
-                      : applicant.status === "interview_scheduled"
-                      ? "bg-purple-500"
-                      : applicant.status === "offer_made"
-                      ? "bg-green-500"
-                      : applicant.status === "rejected"
-                      ? "bg-red-500"
-                      : "bg-emerald-500"
-                  }`}
-                />
+                  key={applicant.id}
+                  style={{
+                    background: "linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(6, 182, 212, 0.2))",
+                    backdropFilter: "blur(8px)",
+                    border: "1px solid rgba(20, 184, 166, 0.3)",
+                  }}
+                  className="rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
+                >
+                  {/* Status Banner */}
+                  <div
+                    className={`w-full h-3 ${
+                      applicant.status === "pending"
+                        ? "bg-yellow-500"
+                        : applicant.status === "reviewed"
+                        ? "bg-blue-500"
+                        : applicant.status === "interview_scheduled"
+                        ? "bg-purple-500"
+                        : applicant.status === "offer_made"
+                        ? "bg-green-500"
+                        : applicant.status === "rejected"
+                        ? "bg-red-500"
+                        : "bg-emerald-500"
+                    }`}
+                  />
 
-                <div className="p-6">
-                  {/* Applicant Header */}
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="flex-1">
-                      <h3 className="text-xl font-bold text-white mb-1">{applicant.name}</h3>
-                      <p className="text-teal-100 text-sm mb-2">{applicant.email}</p>
-                      <div className="flex items-center gap-2 text-teal-200 text-sm">
-                        <FaMapMarkerAlt />
-                        <span>{applicant.location}</span>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium border backdrop-blur-sm ${
-                          applicant.status === "pending"
-                            ? "bg-yellow-400/20 text-yellow-50 border-yellow-200/30"
-                            : applicant.status === "reviewed"
-                            ? "bg-blue-400/20 text-blue-50 border-blue-200/30"
-                            : applicant.status === "interview_scheduled"
-                            ? "bg-purple-400/20 text-purple-50 border-purple-200/30"
-                            : applicant.status === "offer_made"
-                            ? "bg-green-400/20 text-green-50 border-green-200/30"
-                            : applicant.status === "rejected"
-                            ? "bg-red-400/20 text-red-50 border-red-200/30"
-                            : "bg-emerald-400/20 text-emerald-50 border-emerald-200/30"
-                        }`}
-                      >
-                        {applicant.status.replace("_", " ").toUpperCase()}
-                      </span>
-                      {applicant.rating && (
-                        <div className="flex items-center mt-2 justify-end">
-                          {[...Array(5)].map((_, i) => (
-                            <FaStar
-                              key={i}
-                              className={`text-sm ${i < applicant.rating! ? "text-yellow-400" : "text-gray-400"}`}
-                            />
-                          ))}
+                  <div className="p-6">
+                    {/* Applicant Header */}
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-white mb-1">{applicant.name}</h3>
+                        <p className="text-teal-100 text-sm mb-2">{applicant.email}</p>
+                        <div className="flex items-center gap-2 text-teal-200 text-sm">
+                          <FaMapMarkerAlt />
+                          <span>{applicant.location}</span>
                         </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Application Info */}
-                  <div className="mb-4 text-sm text-teal-100">
-                    <div className="flex justify-between items-center">
-                      <span>Applied: {formatDate(applicant.appliedDate)}</span>
-                    </div>
-                    {applicant.interviewDate && (
-                      <div className="mt-2 text-purple-200 font-medium">
-                        Interview: {formatDate(applicant.interviewDate)}
                       </div>
-                    )}
-                  </div>
-
-                  {/* Badges Preview */}
-                  <div className="mb-4">
-                    <h4 className="text-sm font-medium text-teal-100 mb-2">
-                      Badges ({applicant.badges.length})
-                    </h4>
-                    <div className="flex flex-wrap gap-1">
-                      {applicant.badges.slice(0, 2).map((badge) => (
+                      <div className="text-right">
                         <span
-                          key={badge.id}
-                          className={`${badge.color} text-white text-xs px-2 py-1 rounded-full flex items-center gap-1`}
+                          className={`px-3 py-1 rounded-full text-xs font-medium border backdrop-blur-sm ${
+                            applicant.status === "pending"
+                              ? "bg-yellow-400/20 text-yellow-50 border-yellow-200/30"
+                              : applicant.status === "reviewed"
+                              ? "bg-blue-400/20 text-blue-50 border-blue-200/30"
+                              : applicant.status === "interview_scheduled"
+                              ? "bg-purple-400/20 text-purple-50 border-purple-200/30"
+                              : applicant.status === "offer_made"
+                              ? "bg-green-400/20 text-green-50 border-green-200/30"
+                              : applicant.status === "rejected"
+                              ? "bg-red-400/20 text-red-50 border-red-200/30"
+                              : "bg-emerald-400/20 text-emerald-50 border-emerald-200/30"
+                          }`}
                         >
-                          <span>{badge.icon}</span>
-                          <span>{badge.name}</span>
+                          {applicant.status.replace("_", " ").toUpperCase()}
                         </span>
-                      ))}
-                      {applicant.badges.length > 2 && (
-                        <span className="bg-white/20 text-teal-100 text-xs px-2 py-1 rounded-full border border-white/30">
-                          +{applicant.badges.length - 2} more
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Skills Preview */}
-                  <div className="mb-4">
-                    <h4 className="text-sm font-medium text-teal-100 mb-2">
-                      Skills ({applicant.skills.length})
-                    </h4>
-                    <div className="flex flex-wrap gap-1">
-                      {applicant.skills.slice(0, 3).map((skill, index) => (
-                        <span
-                          key={index}
-                          className="bg-cyan-400/20 text-cyan-50 text-xs px-2 py-1 rounded-full border border-cyan-200/30"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                      {applicant.skills.length > 3 && (
-                        <span className="bg-white/20 text-teal-100 text-xs px-2 py-1 rounded-full border border-white/30">
-                          +{applicant.skills.length - 3} more
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Education */}
-                  {applicant.education.length > 0 && (
-                    <div className="mb-4">
-                      <h4 className="text-sm font-medium text-teal-100 mb-1">Education</h4>
-                      <div className="text-xs text-teal-200">
-                        <div>{applicant.education[0].degree}</div>
-                        <div>{applicant.education[0].institution}</div>
-                        {applicant.education[0].gpa && (
-                          <div>GPA: {applicant.education[0].gpa}</div>
+                        {applicant.rating && (
+                          <div className="flex items-center mt-2 justify-end">
+                            {[...Array(5)].map((_, i) => (
+                              <FaStar
+                                key={i}
+                                className={`text-sm ${i < applicant.rating! ? "text-yellow-400" : "text-gray-400"}`}
+                              />
+                            ))}
+                          </div>
                         )}
                       </div>
                     </div>
-                  )}
 
-                  {/* Action Buttons */}
-                  <div className="space-y-3 pt-4 border-t border-teal-200/20">
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => window.open(applicant.cvUrl, "_blank")}
-                        style={{
-                          background: "linear-gradient(135deg, #64748b, #475569)",
-                          color: "white",
-                          padding: "8px 12px",
-                          borderRadius: "8px",
-                          fontSize: "12px",
-                          fontWeight: "600",
-                          border: "none",
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "4px",
-                          flex: "1",
-                        }}
-                      >
-                        <FaDownload />
-                        CV
-                      </button>
-                      <button
-                        onClick={() => setSelectedApplicant(applicant)}
-                        style={{
-                          background: "linear-gradient(135deg, #3b82f6, #2563eb)",
-                          color: "white",
-                          padding: "8px 12px",
-                          borderRadius: "8px",
-                          fontSize: "12px",
-                          fontWeight: "600",
-                          border: "none",
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "4px",
-                          flex: "2",
-                        }}
-                      >
-                        <FaEye />
-                        View Details
-                      </button>
+                    {/* Application Info */}
+                    <div className="mb-4 text-sm text-teal-100">
+                      <div className="flex justify-between items-center">
+                        <span>Applied: {formatDate(applicant.appliedDate)}</span>
+                      </div>
+                      {applicant.interviewDate && (
+                        <div className="mt-2 text-purple-200 font-medium">
+                          Interview: {formatDate(applicant.interviewDate)}
+                        </div>
+                      )}
                     </div>
 
-                    {applicant.status === "pending" && (
+                    {/* Badges Preview */}
+                    <div className="mb-4">
+                      <h4 className="text-sm font-medium text-teal-100 mb-2">
+                        Badges ({applicant.badges.length})
+                      </h4>
+                      <div className="flex flex-wrap gap-1">
+                        {applicant.badges.slice(0, 2).map((badge) => (
+                          <span
+                            key={badge.id}
+                            className={`${badge.color} text-white text-xs px-2 py-1 rounded-full flex items-center gap-1`}
+                          >
+                            <span>{badge.icon}</span>
+                            <span>{badge.name}</span>
+                          </span>
+                        ))}
+                        {applicant.badges.length > 2 && (
+                          <span className="bg-white/20 text-teal-100 text-xs px-2 py-1 rounded-full border border-white/30">
+                            +{applicant.badges.length - 2} more
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Skills Preview */}
+                    <div className="mb-4">
+                      <h4 className="text-sm font-medium text-teal-100 mb-2">
+                        Skills ({applicant.skills.length})
+                      </h4>
+                      <div className="flex flex-wrap gap-1">
+                        {applicant.skills.slice(0, 3).map((skill, index) => (
+                          <span
+                            key={index}
+                            className="bg-cyan-400/20 text-cyan-50 text-xs px-2 py-1 rounded-full border border-cyan-200/30"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                        {applicant.skills.length > 3 && (
+                          <span className="bg-white/20 text-teal-100 text-xs px-2 py-1 rounded-full border border-white/30">
+                            +{applicant.skills.length - 3} more
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Education */}
+                    {applicant.education.length > 0 && (
+                      <div className="mb-4">
+                        <h4 className="text-sm font-medium text-teal-100 mb-1">Education</h4>
+                        <div className="text-xs text-teal-200">
+                          <div>{applicant.education[0].degree}</div>
+                          <div>{applicant.education[0].institution}</div>
+                          {applicant.education[0].gpa && (
+                            <div>GPA: {applicant.education[0].gpa}</div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Academic Transcript Section */}
+                    <div className="mb-4">
+                      <h4 className="text-sm font-medium text-teal-100 mb-2">
+                        Academic Transcript
+                      </h4>
+                      {transcriptReq.status === "none" && (
+                        <button
+                          onClick={() => handleRequestTranscript(applicant.id)}
+                          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm font-medium"
+                        >
+                          Request Transcript
+                        </button>
+                      )}
+                      {transcriptReq.status === "pending" && (
+                        <span className="bg-yellow-400/20 text-yellow-700 px-4 py-1 rounded-full text-xs font-semibold">
+                          Pending Admin Approval
+                        </span>
+                      )}
+                      {transcriptReq.status === "approved" && transcriptReq.transcriptUrl && (
+                        <a
+                          href={transcriptReq.transcriptUrl}
+                          download
+                          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm font-medium"
+                        >
+                          Download Transcript
+                        </a>
+                      )}
+                      {transcriptReq.status === "rejected" && (
+                        <span className="bg-red-600 text-white px-4 py-1 rounded-full text-xs font-semibold">
+                          Request Rejected
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="space-y-3 pt-4 border-t border-teal-200/20">
                       <div className="flex gap-2">
+                        <button
+                          onClick={() => window.open(applicant.cvUrl, "_blank")}
+                          style={{
+                            background: "linear-gradient(135deg, #64748b, #475569)",
+                            color: "white",
+                            padding: "8px 12px",
+                            borderRadius: "8px",
+                            fontSize: "12px",
+                            fontWeight: "600",
+                            border: "none",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "4px",
+                            flex: "1",
+                          }}
+                        >
+                          <FaDownload />
+                          CV
+                        </button>
+                        <button
+                          onClick={() => setSelectedApplicant(applicant)}
+                          style={{
+                            background: "linear-gradient(135deg, #3b82f6, #2563eb)",
+                            color: "white",
+                            padding: "8px 12px",
+                            borderRadius: "8px",
+                            fontSize: "12px",
+                            fontWeight: "600",
+                            border: "none",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "4px",
+                            flex: "2",
+                          }}
+                        >
+                          <FaEye />
+                          View Details
+                        </button>
+                      </div>
+
+                      {applicant.status === "pending" && (
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => {
+                              setSelectedApplicant(applicant);
+                              setShowInterviewModal(true);
+                            }}
+                            style={{
+                              background: "linear-gradient(135deg, #10b981, #059669)",
+                              color: "white",
+                              padding: "10px 16px",
+                              borderRadius: "10px",
+                              fontSize: "12px",
+                              fontWeight: "600",
+                              border: "none",
+                              cursor: "pointer",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "6px",
+                              flex: "1",
+                            }}
+                          >
+                            <FaVideo />
+                            Interview
+                          </button>
+                          <button
+                            onClick={() => handleStatusUpdate(applicant.id, "rejected")}
+                            style={{
+                              background: "linear-gradient(135deg, #ef4444, #dc2626)",
+                              color: "white",
+                              padding: "10px 16px",
+                              borderRadius: "10px",
+                              fontSize: "12px",
+                              fontWeight: "600",
+                              border: "none",
+                              cursor: "pointer",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "6px",
+                              flex: "1",
+                            }}
+                          >
+                            <FaTimesCircle />
+                            Reject
+                          </button>
+                        </div>
+                      )}
+
+                      {applicant.status === "reviewed" && (
                         <button
                           onClick={() => {
                             setSelectedApplicant(applicant);
                             setShowInterviewModal(true);
                           }}
                           style={{
+                            background: "linear-gradient(135deg, #8b5cf6, #7c3aed)",
+                            color: "white",
+                            padding: "12px 20px",
+                            borderRadius: "10px",
+                            fontSize: "14px",
+                            fontWeight: "600",
+                            border: "none",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "8px",
+                            width: "100%",
+                          }}
+                        >
+                          <FaCalendarAlt />
+                          Schedule Interview
+                        </button>
+                      )}
+
+                      {applicant.status === "interview_scheduled" && (
+                        <button
+                          onClick={() => handleStatusUpdate(applicant.id, "offer_made")}
+                          style={{
                             background: "linear-gradient(135deg, #10b981, #059669)",
                             color: "white",
-                            padding: "10px 16px",
+                            padding: "12px 20px",
                             borderRadius: "10px",
-                            fontSize: "12px",
+                            fontSize: "14px",
                             fontWeight: "600",
                             border: "none",
                             cursor: "pointer",
                             display: "flex",
                             alignItems: "center",
-                            gap: "6px",
-                            flex: "1",
+                            justifyContent: "center",
+                            gap: "8px",
+                            width: "100%",
                           }}
                         >
-                          <FaVideo />
-                          Interview
+                          <FaCheckCircle />
+                          Make Offer
                         </button>
+                      )}
+
+                      {applicant.status === "offer_made" && (
                         <button
-                          onClick={() => handleStatusUpdate(applicant.id, "rejected")}
+                          onClick={() => {
+                            handleStatusUpdate(applicant.id, "hired");
+                            handleCloseJobPosting();
+                          }}
                           style={{
-                            background: "linear-gradient(135deg, #ef4444, #dc2626)",
+                            background: "linear-gradient(135deg, #059669, #047857)",
                             color: "white",
-                            padding: "10px 16px",
+                            padding: "12px 20px",
                             borderRadius: "10px",
-                            fontSize: "12px",
+                            fontSize: "14px",
                             fontWeight: "600",
                             border: "none",
                             cursor: "pointer",
                             display: "flex",
                             alignItems: "center",
-                            gap: "6px",
-                            flex: "1",
+                            justifyContent: "center",
+                            gap: "8px",
+                            width: "100%",
                           }}
                         >
-                          <FaTimesCircle />
-                          Reject
+                          <FaAward />
+                          Mark as Hired
                         </button>
-                      </div>
-                    )}
-
-                    {applicant.status === "reviewed" && (
-                      <button
-                        onClick={() => {
-                          setSelectedApplicant(applicant);
-                          setShowInterviewModal(true);
-                        }}
-                        style={{
-                          background: "linear-gradient(135deg, #8b5cf6, #7c3aed)",
-                          color: "white",
-                          padding: "12px 20px",
-                          borderRadius: "10px",
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          border: "none",
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          gap: "8px",
-                          width: "100%",
-                        }}
-                      >
-                        <FaCalendarAlt />
-                        Schedule Interview
-                      </button>
-                    )}
-
-                    {applicant.status === "interview_scheduled" && (
-                      <button
-                        onClick={() => handleStatusUpdate(applicant.id, "offer_made")}
-                        style={{
-                          background: "linear-gradient(135deg, #10b981, #059669)",
-                          color: "white",
-                          padding: "12px 20px",
-                          borderRadius: "10px",
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          border: "none",
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          gap: "8px",
-                          width: "100%",
-                        }}
-                      >
-                        <FaCheckCircle />
-                        Make Offer
-                      </button>
-                    )}
-
-                    {applicant.status === "offer_made" && (
-                      <button
-                        onClick={() => {
-                          handleStatusUpdate(applicant.id, "hired");
-                          handleCloseJobPosting();
-                        }}
-                        style={{
-                          background: "linear-gradient(135deg, #059669, #047857)",
-                          color: "white",
-                          padding: "12px 20px",
-                          borderRadius: "10px",
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          border: "none",
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          gap: "8px",
-                          width: "100%",
-                        }}
-                      >
-                        <FaAward />
-                        Mark as Hired
-                      </button>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Applicant Details Modal - Show when selectedApplicant is set */}

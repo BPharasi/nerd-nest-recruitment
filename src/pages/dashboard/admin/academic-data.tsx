@@ -4,7 +4,24 @@ import Head from "next/head";
 import { useSession } from "next-auth/react";
 import Header from "@/components/Header";
 import Link from "next/link";
-import { FaHome, FaClipboardList, FaUserTie, FaUsers, FaFileAlt } from "react-icons/fa";
+import {
+  FaUsers,
+  FaUser,
+  FaUserShield,
+  FaUserTie,
+  FaUserGraduate,
+  FaPlus,
+  FaSearch,
+  FaHome,
+  FaClipboardList,
+  FaFileAlt,
+  FaTrophy,
+  FaVideo,
+  FaBell,
+  FaChartBar,
+  FaCheckCircle,
+} from "react-icons/fa";
+import { useRef } from "react";
 
 // Transcript data for each student
 const transcriptData: Record<string, { name: string; year: string; program: string; courses: { name: string; percentage: number }[]; average: number }> = {
@@ -286,8 +303,14 @@ const navigationGroups = [
       { href: "/dashboard/admin", label: "Dashboard Home", icon: <FaHome /> },
       { href: "/dashboard/admin/users", label: "User Management", icon: <FaUsers /> },
       { href: "/dashboard/admin/employer-verification", label: "Employer Verification", icon: <FaUserTie /> },
-      { href: "/dashboard/admin/academic-requests", label: "Academic Data", icon: <FaFileAlt /> },
-      { href: "/dashboard/admin/skill-moderation", label: "Skill Moderation", icon: <FaClipboardList /> },
+      { href: "/dashboard/admin/academic-data", label: "Academic Data", icon: <FaFileAlt /> },
+      { href: "/dashboard/admin/skill-moderation", label: "Skill Moderation", icon: <FaTrophy /> },
+      { href: "/dashboard/admin/job-approval", label: "Job Approval", icon: <FaFileAlt /> },
+      { href: "/dashboard/admin/interview-oversight", label: "Interview Oversight", icon: <FaVideo /> },
+      { href: "/dashboard/admin/analytics", label: "Analytics", icon: <FaChartBar /> },
+      { href: "/dashboard/admin/announcements", label: "Announcements", icon: <FaBell /> },
+      { href: "/dashboard/admin/helpdesk", label: "Helpdesk", icon: <FaClipboardList /> },
+      { href: "/dashboard/admin/data-governance", label: "Data Governance", icon: <FaCheckCircle /> },
     ],
   },
 ];
@@ -295,12 +318,31 @@ const navigationGroups = [
 const AdminAcademicDataPage: NextPage = () => {
   const { data: session } = useSession();
   const [requests, setRequests] = useState(mockRequests);
+  const [notification, setNotification] = useState<{ message: string } | null>(null);
 
+  // Simulate sending transcript and notifying employer/admin
   const handleApprove = (id: string) => {
     setRequests(reqs =>
       reqs.map(r => r.id === id ? { ...r, consent: true } : r)
     );
+    // Show notification to admin
+    setNotification({ message: "Transcript sent to employer and notification created." });
+    // Simulate API call to create notification for employer and admin
+    // In real app, POST to /api/notifications
+    // fetch("/api/notifications", { method: "POST", body: JSON.stringify({ ... }) });
+    setTimeout(() => setNotification(null), 4000);
   };
+
+  // Helper to generate a transcript file (as a Blob URL)
+  function generateTranscriptFile(transcript: typeof transcriptData[string]) {
+    let content = `Transcript for ${transcript.name}\n${transcript.year}, ${transcript.program}\n\n`;
+    content += "Course\t\tPercentage\n";
+    transcript.courses.forEach(c => {
+      content += `${c.name}\t\t${c.percentage}%\n`;
+    });
+    content += `\nOverall Average: ${transcript.average}%\n`;
+    return new Blob([content], { type: "text/plain" });
+  }
 
   return (
     <div
@@ -430,6 +472,14 @@ const AdminAcademicDataPage: NextPage = () => {
       >
         <div className="max-w-5xl mx-auto px-4">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">Academic Transcript Requests</h1>
+          {/* Notification Banner */}
+          {notification && (
+            <div className="mb-6">
+              <div className="bg-green-600 text-white px-6 py-3 rounded-lg shadow font-semibold text-center">
+                {notification.message}
+              </div>
+            </div>
+          )}
           <div
             className="bg-white rounded-xl shadow-lg p-8"
             style={{
@@ -513,24 +563,14 @@ const AdminAcademicDataPage: NextPage = () => {
                     <h3 className="text-lg font-bold text-gray-900">{transcript.name}</h3>
                     <div className="text-gray-600 text-sm">{transcript.year} • {transcript.program}</div>
                   </div>
-                  <table className="min-w-full text-left border border-gray-300 mb-4" style={{ borderCollapse: "collapse" }}>
-                    <thead>
-                      <tr>
-                        <th className="py-2 px-3 border border-gray-300 text-gray-700 text-xs font-semibold">Course</th>
-                        <th className="py-2 px-3 border border-gray-300 text-gray-700 text-xs font-semibold">Percentage</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {transcript.courses.map((course, idx) => (
-                        <tr key={idx}>
-                          <td className="py-2 px-3 border border-gray-300">{course.name}</td>
-                          <td className="py-2 px-3 border border-gray-300">{course.percentage}%</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <div className="font-semibold text-purple-700 text-base">
-                    Overall Average: {transcript.average}%
+                  <div className="flex items-center gap-4 mb-4">
+                    <a
+                      href={URL.createObjectURL(generateTranscriptFile(transcript))}
+                      download={`${transcript.name.replace(/\s+/g, "_")}_Transcript.txt`}
+                      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition text-sm font-medium"
+                    >
+                      Download Transcript
+                    </a>
                   </div>
                 </div>
               ))}
