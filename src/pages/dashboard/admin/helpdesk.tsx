@@ -212,11 +212,15 @@ const mockTickets = [
 const AdminHelpdeskPage: NextPage = () => {
   const { data: session } = useSession();
   // Initialize tickets directly with mockTickets
-  const [tickets, setTickets] = useState<any[]>(() => {
+  const [tickets, setTickets] = useState<any[]>(mockTickets);
+
+  // Load user tickets from localStorage on client side
+  useEffect(() => {
     const storedTickets = localStorage.getItem('userTickets');
     const userTickets = storedTickets ? JSON.parse(storedTickets) : [];
-    return [...mockTickets, ...userTickets];
-  });
+    setTickets(prev => [...prev, ...userTickets]);
+  }, []);
+
   const [expanded, setExpanded] = useState<string | null>(null);
   const [modal, setModal] = useState<{
     open: boolean;
