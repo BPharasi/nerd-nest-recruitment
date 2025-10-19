@@ -219,7 +219,6 @@ const EmployerDashboard: NextPage = () => {
             </div>
             <div className="text-center">
               <h3 className="font-semibold text-white text-lg">{session?.user?.name || "Employer"}</h3>
-              <p className="text-teal-100 text-sm">TechCorp Solutions</p>
             </div>
           </div>
         </div>
@@ -274,7 +273,20 @@ const EmployerDashboard: NextPage = () => {
           backgroundAttachment: 'fixed'
         }}
       >
-        <div className="max-w-7xl mx-auto px-4">
+        {/* Blurred overlay for background image */}
+        <div
+          style={{
+            position: 'fixed',
+            top: '75px',
+            left: '256px',
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            backdropFilter: 'blur(8px)',
+            pointerEvents: 'none'
+          }}
+        />
+        <div className="max-w-7xl mx-auto px-4" style={{ position: 'relative', zIndex: 1 }}>
           {/* Hero Section */}
           <section className="mb-10">
             <div className="bg-gradient-to-r from-teal-600 to-cyan-600 rounded-xl p-6 text-white">
@@ -383,9 +395,10 @@ const EmployerDashboard: NextPage = () => {
                     <div
                       key={posting.id}
                       style={{
-                        background: "linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(6, 182, 212, 0.2))",
+                        background: "linear-gradient(135deg, rgba(20, 184, 166, 0.7), rgba(6, 182, 212, 0.7))",
                         backdropFilter: "blur(8px)",
                         border: "1px solid rgba(20, 184, 166, 0.3)",
+                        borderRadius: "0.75rem"
                       }}
                       className="rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
                     >
@@ -525,7 +538,7 @@ const EmployerDashboard: NextPage = () => {
             <div className="bg-gradient-to-br from-teal-500/10 to-cyan-500/10 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-white">Active Position Statistics</h2>
-                <Link href="/dashboard/employer/analytics">
+                <Link href="/dashboard/employer">
                   <span
                     style={{
                       color: '#e2e8f0',
@@ -534,7 +547,7 @@ const EmployerDashboard: NextPage = () => {
                       textDecoration: 'none',
                       padding: '10px 16px',
                       borderRadius: '8px',
-                      background: 'rgba(100, 116, 139, 0.2)',
+                      background: 'rgba(100, 116, 139, 0.6)',
                       border: '1px solid rgba(100, 116, 139, 0.3)',
                       transition: 'all 0.3s ease',
                       cursor: 'pointer',
@@ -560,7 +573,7 @@ const EmployerDashboard: NextPage = () => {
                     <div
                       key={index}
                       style={{
-                        background: "linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(6, 182, 212, 0.2))",
+                        background: "linear-gradient(135deg, rgba(20, 184, 166, 0.6), rgba(6, 182, 212, 0.6))",
                         backdropFilter: "blur(8px)",
                         border: "1px solid rgba(20, 184, 166, 0.3)",
                       }}
@@ -616,7 +629,7 @@ const EmployerDashboard: NextPage = () => {
                         textDecoration: 'none',
                         padding: '10px 16px',
                         borderRadius: '8px',
-                        background: 'rgba(100, 116, 139, 0.2)',
+                        background: 'rgba(100, 116, 139, 0.5)',
                         border: '1px solid rgba(100, 116, 139, 0.3)',
                         transition: 'all 0.3s ease',
                         cursor: 'pointer',
@@ -637,7 +650,7 @@ const EmployerDashboard: NextPage = () => {
                   <div className="flex gap-2">
                     <button 
                       style={{
-                        background: 'rgba(100, 116, 139, 0.2)',
+                        background: 'rgba(100, 116, 139, 0.5)',
                         border: '1px solid rgba(100, 116, 139, 0.3)',
                         color: 'white',
                         padding: '8px',
@@ -656,7 +669,7 @@ const EmployerDashboard: NextPage = () => {
                     </button>
                     <button 
                       style={{
-                        background: 'rgba(100, 116, 139, 0.2)',
+                        background: 'rgba(100, 116, 139, 0.5)',
                         border: '1px solid rgba(100, 116, 139, 0.3)',
                         color: 'white',
                         padding: '8px',
@@ -683,7 +696,7 @@ const EmployerDashboard: NextPage = () => {
                     <div
                       key={interview.id}
                       style={{
-                        background: "linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(6, 182, 212, 0.2))",
+                        background: "linear-gradient(135deg, rgba(20, 184, 166, 0.6), rgba(6, 182, 212, 0.6))",
                         backdropFilter: "blur(8px)",
                         border: "1px solid rgba(20, 184, 166, 0.3)",
                       }}

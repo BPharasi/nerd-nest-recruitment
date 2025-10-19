@@ -224,7 +224,20 @@ const EmployerNotificationsPage: NextPage = () => {
           backgroundRepeat: 'no-repeat',
           backgroundAttachment: 'fixed'
         }}>
-          <div className="max-w-2xl mx-auto">
+          {/* Blurred overlay for background image */}
+          <div
+            style={{
+              position: 'fixed',
+              top: '75px',
+              left: '256px',
+              right: 0,
+              bottom: 0,
+              zIndex: 0,
+              backdropFilter: 'blur(8px)',
+              pointerEvents: 'none'
+            }}
+          />
+          <div className="max-w-2xl mx-auto" style={{ position: 'relative', zIndex: 1 }}>
             <h1 className="text-3xl font-bold text-center text-white mb-8 flex items-center justify-center gap-2">
               <FaBell className="text-yellow-300" /> Notifications
             </h1>

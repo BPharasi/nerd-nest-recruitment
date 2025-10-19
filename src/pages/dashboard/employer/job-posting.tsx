@@ -873,12 +873,25 @@ const EmployerJobPostingPage: NextPage = () => {
         bottom: 0,
         left: '256px',
         overflowY: 'auto',
-        backgroundImage: 'url("/images/skills_background(1).png")',
+        backgroundImage: 'url("/images/skills_background(2).png")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundAttachment: 'fixed'
       }}>
+        {/* Blurred overlay for background image */}
+        <div
+          style={{
+            position: 'fixed',
+            top: '75px',
+            left: '256px',
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            backdropFilter: 'blur(8px)',
+            pointerEvents: 'none'
+          }}
+        />
         {/* Horizontal Tabs */}
         <div style={styles.tabContainer}>
           <div style={styles.tabList}>
@@ -903,7 +916,7 @@ const EmployerJobPostingPage: NextPage = () => {
 
         {/* Form Content */}
         <div className="p-6">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-4xl mx-auto" style={{ position: 'relative', zIndex: 1 }}>
             <div className="mb-6">
               <Link 
                 href="/dashboard/employer" 

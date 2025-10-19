@@ -376,8 +376,25 @@ const EmployerCompanyProfilePage: NextPage = () => {
         overflowY: "auto",
         padding: "3rem 1.5rem",
         backgroundImage: 'url("/images/skills_background(2).png")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed'
       }}>
-        <div className="max-w-[1000px] mx-auto">
+        {/* Blurred overlay for background image */}
+        <div
+          style={{
+            position: 'fixed',
+            top: '75px',
+            left: '256px',
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            backdropFilter: 'blur(8px)',
+            pointerEvents: 'none'
+          }}
+        />
+        <div className="max-w-[1000px] mx-auto" style={{ position: 'relative', zIndex: 1 }}>
           <form onSubmit={handleSubmit}>
             {/* Basic Company Information */}
             <section style={styles.section}>

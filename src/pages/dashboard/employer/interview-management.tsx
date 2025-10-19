@@ -191,28 +191,59 @@ const InterviewManagementPage: NextPage = () => {
         </div>
       </aside>
       {/* Main Content */}
-      <main style={{
-        position: "absolute",
-        top: "75px",
-        right: 0,
-        bottom: 0,
-        left: "256px",
-        overflowY: "auto",
-        padding: "2rem",
-        backgroundImage: "url('/images/skills_background(1).png')",
+      <main
+        style={{
+          position: "absolute",
+          top: "75px",
+          right: 0,
+          bottom: 0,
+          left: "256px",
+          overflowY: "auto",
+          padding: "2rem",
+          backgroundImage: 'url("/images/skills_background(2).png")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           backgroundAttachment: 'fixed'
-      }}>
-        <div className="max-w-7xl mx-auto">
+        }}
+      >
+        {/* Blurred overlay for background image */}
+        <div
+          style={{
+            position: 'fixed',
+            top: '75px',
+            left: '256px',
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            backdropFilter: 'blur(8px)',
+            pointerEvents: 'none'
+          }}
+        />
+        {/* Teal blurred card background */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '2rem',
+            left: '2rem',
+            right: '2rem',
+            bottom: '2rem',
+            zIndex: 1,
+            background: "linear-gradient(135deg, rgba(20,184,166,0.5), rgba(6,182,212,0.5))",
+            borderRadius: "1.5rem",
+            boxShadow: "0 8px 32px rgba(20,184,166,0.10)",
+            backdropFilter: "blur(12px)",
+            pointerEvents: 'none'
+          }}
+        />
+        <div className="max-w-7xl mx-auto" style={{ position: 'relative', zIndex: 2 }}>
           <h1 className="text-3xl font-bold text-gray-900 mb-10">Scheduled Interviews</h1>
           <div className="grid grid-cols-1 gap-8">
             {interviews.map((interview) => (
               <div
                 key={interview.id}
                 style={{
-                  background: "linear-gradient(135deg, rgba(124,58,237,0.08), rgba(20,184,166,0.12))",
+                  background: "linear-gradient(135deg, rgba(124,58,237,0.6), rgba(20,184,166,0.6))",
                   border: "1px solid rgba(124,58,237,0.12)",
                   borderRadius: "1rem",
                   boxShadow: "0 4px 16px rgba(124,58,237,0.08)",

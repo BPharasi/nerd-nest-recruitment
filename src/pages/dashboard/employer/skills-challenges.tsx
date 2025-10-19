@@ -239,7 +239,7 @@ const EmployerSkillsChallengesPage: NextPage = () => {
         {/* Challenge Details Card */}
         <div 
           style={{
-            background: "linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(6, 182, 212, 0.2))",
+            background: "linear-gradient(135deg, rgba(20, 184, 166, 0.6), rgba(6, 182, 212, 0.6))",
             backdropFilter: "blur(8px)",
             border: "1px solid rgba(20, 184, 166, 0.3)",
           }}
@@ -747,8 +747,25 @@ const EmployerSkillsChallengesPage: NextPage = () => {
         overflowY: "auto",
         padding: "2rem",
         backgroundImage: 'url("/images/skills_background(2).png")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed'
       }}>
-        <div className="max-w-7xl mx-auto">
+        {/* Blurred overlay for background image */}
+        <div
+          style={{
+            position: 'fixed',
+            top: '75px',
+            left: '256px',
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            backdropFilter: 'blur(10px)',
+            pointerEvents: 'none'
+          }}
+        />
+        <div className="max-w-7xl mx-auto" style={{ position: 'relative', zIndex: 1 }}>
           {!selectedChallenge ? (
             <>
               {/* Header Section */}
@@ -798,7 +815,7 @@ const EmployerSkillsChallengesPage: NextPage = () => {
                   <div
                     key={challenge.id}
                     style={{
-                      background: "linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(6, 182, 212, 0.2))",
+                      background: "linear-gradient(135deg, rgba(20, 184, 166, 0.6), rgba(6, 182, 212, 0.6))",
                       backdropFilter: "blur(8px)",
                       border: "1px solid rgba(20, 184, 166, 0.3)",
                     }}

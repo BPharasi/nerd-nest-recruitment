@@ -264,7 +264,6 @@ const EmployerApplicationsPage: NextPage = () => {
     {
       title: "Analytics",
       items: [
-        { href: "/dashboard/employer/analytics", label: "Analytics", icon: <FaChartBar /> },
         { href: "/dashboard/employer/notifications", label: "Notifications", icon: <FaBell /> },
       ],
     },
@@ -516,9 +515,42 @@ const EmployerApplicationsPage: NextPage = () => {
           overflowY: "auto",
           padding: "2rem",
           backgroundImage: 'url("/images/skills_background(2).png")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed'
         }}
       >
-        <div className="max-w-7xl mx-auto">
+        {/* Blurred overlay for background image */}
+        <div
+          style={{
+            position: 'fixed',
+            top: '75px',
+            left: '256px',
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            backdropFilter: 'blur(8px)',
+            pointerEvents: 'none'
+          }}
+        />
+        {/* Teal blurred card background */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '2rem',
+            left: '2rem',
+            right: '2rem',
+            bottom: '2rem',
+            zIndex: 1,
+            background: "linear-gradient(135deg, rgba(20,184,166,0.6), rgba(6,182,212,0.6))",
+            borderRadius: "1.5rem",
+            boxShadow: "0 8px 32px rgba(20,184,166,0.10)",
+            backdropFilter: "blur(12px)",
+            pointerEvents: 'none'
+          }}
+        />
+        <div className="max-w-7xl mx-auto" style={{ position: 'relative', zIndex: 2 }}>
           {/* Header Section */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-white mb-2">Applications Management</h1>
@@ -636,7 +668,7 @@ const EmployerApplicationsPage: NextPage = () => {
                 <div
                   key={applicant.id}
                   style={{
-                    background: "linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(6, 182, 212, 0.2))",
+                    background: "linear-gradient(135deg, rgba(20, 184, 166, 0.6), rgba(6, 182, 212, 0.6))",
                     backdropFilter: "blur(8px)",
                     border: "1px solid rgba(20, 184, 166, 0.3)",
                   }}
@@ -998,7 +1030,7 @@ const EmployerApplicationsPage: NextPage = () => {
                 {/* Details Card */}
                 <div
                   style={{
-                    background: "linear-gradient(135deg, rgba(167, 123, 202, 0.15), rgba(124, 58, 237, 0.18))",
+                    background: "linear-gradient(135deg, rgba(167, 123, 202, 0.6), rgba(124, 58, 237, 0.6))",
                     border: "1px solid rgba(124, 58, 237, 0.15)",
                     borderRadius: "1rem",
                     boxShadow: "0 4px 16px rgba(124,58,237,0.08)",
