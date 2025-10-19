@@ -175,7 +175,7 @@ const StudentProfilePage: NextPage = () => {
       items: [
         { href: "/jobs", label: "Job Search & Matching", icon: <FaSearch /> },
         { href: "/dashboard/student/applications", label: "Applications", icon: <FaClipboardList /> },
-        { href: "/dashboard/student/interview-practise", label: "Interviews", icon: <FaVideo /> },
+        { href: "/dashboard/student/interview-practise", label: "Practise Interviews", icon: <FaVideo /> },
       ]
     },
     {
@@ -324,8 +324,22 @@ const StudentProfilePage: NextPage = () => {
         left: "256px",
         overflowY: "auto",
         padding: "3rem 1.5rem",
-        backgroundImage: 'url("/images/skills_background(2).png")',
+        backgroundImage: 'url("/images/skills_background.png")',
       }}>
+        
+        <div
+                  style={{
+                    position: 'fixed',
+                    top: '75px',
+                    left: '256px',
+                    right: 0,
+                    bottom: 0,
+                    zIndex: 0,
+                    backdropFilter: 'blur(8px)',
+                    pointerEvents: 'none'
+                  }}
+                />
+
         <div className="max-w-[1000px] mx-auto">
           {/* Basic Information */}
           <section style={{

@@ -189,39 +189,72 @@ const PreviousSearches: NextPage = () => {
         left: '256px',
         overflowY: 'auto',
         padding: '2rem',
-        background: '#f9fafb'
+        backgroundImage: "url('/images/skills_background(1).png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed'
       }}>
-        <div className="max-w-7xl mx-auto">
+        {/* Blurred overlay for background image */}
+        <div
+          style={{
+            position: 'fixed',
+            top: '75px',
+            left: '256px',
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            backdropFilter: 'blur(8px)',
+            pointerEvents: 'none'
+          }}
+        />
+        <div className="max-w-7xl mx-auto" style={{ position: 'relative', zIndex: 1 }}>
           <div className="space-y-8">
             {/* Back Button and Title */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <Link 
-                  href="/jobs" 
-                  className="inline-flex items-center text-gray-600 hover:text-gray-900"
-                >
-                  <FaArrowLeft className="mr-2" />
-                  Back to Jobs
-                </Link>
-                <h1 className="text-2xl font-bold text-gray-900">Previous Job Searches</h1>
-              </div>
+            <div className="flex items-center gap-4 mb-8">
+              <Link 
+                href="/jobs" 
+                className="inline-flex items-center text-white hover:text-blue-200 font-medium transition-colors"
+                style={{ fontSize: '1.1rem' }}
+              >
+                <FaArrowLeft className="mr-2" />
+                Back to Jobs
+              </Link>
+              <h1 className="text-2xl font-bold text-white">Previous Job Searches</h1>
             </div>
 
             {/* Search History Cards */}
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 gap-10">
               {previousSearches.map((search) => (
                 <div 
                   key={search.id}
-                  className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
+                  className="bg-white/95 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 border-0 flex flex-col group"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.6)',
+                    backdropFilter: 'blur(2px)',
+                    boxShadow: '0 8px 32px rgba(44, 62, 80, 0.10)',
+                    border: 'none',
+                    position: 'relative'
+                  }}
                 >
+                  {/* Decorative top accent */}
+                  <div
+                    style={{
+                      height: '8px',
+                      width: '100%',
+                      background: 'linear-gradient(90deg, #283593 0%, #00BCD4 100%)',
+                      borderTopLeftRadius: '1rem',
+                      borderTopRightRadius: '1rem'
+                    }}
+                  />
                   <div className="p-6">
                     <div className="flex justify-between items-start mb-4">
                       <div>
-                        <h3 className="text-xl font-semibold text-gray-900 mb-2">{search.query}</h3>
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:underline transition-all duration-200">{search.query}</h3>
                         <div className="flex items-center gap-4 text-sm text-gray-500">
                           <div className="flex items-center">
                             <FaCalendarAlt className="mr-2" />
-                            {new Date(search.searchDate).toLocaleDateString()}
+                            {new Date(search.searchDate).toLocaleDateString('en-CA')}
                           </div>
                           <div className="flex items-center">
                             <FaMapMarkerAlt className="mr-2" />
@@ -229,30 +262,34 @@ const PreviousSearches: NextPage = () => {
                           </div>
                         </div>
                       </div>
-                      <span className="bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
+                      <span className="bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium border border-blue-200 group-hover:scale-105 transition-transform shadow">
                         {search.results} results
                       </span>
                     </div>
-
                     <div className="flex flex-wrap gap-2 mb-4">
                       {Object.entries(search.filters).map(([key, value]) => (
                         <span 
                           key={key}
-                          className="px-3 py-1 bg-gray-50 text-gray-600 rounded-full text-sm"
+                          className="px-3 py-1 bg-gray-50 text-gray-600 rounded-full text-sm border border-gray-200 group-hover:bg-blue-50 transition-colors"
                         >
                           {value}
                         </span>
                       ))}
                     </div>
-
                     <div className="flex justify-end">
                       <button 
-                        className="bg-[#003B73] text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#002855] transition-colors"
+                        className="bg-gradient-to-r from-[#283593] to-[#00BCD4] text-white px-6 py-2 rounded-xl text-sm font-medium hover:bg-[#002855] transition-colors shadow group-hover:scale-105"
+                        style={{
+                          boxShadow: '0 2px 8px rgba(44,62,80,0.10)',
+                          border: 'none'
+                        }}
                       >
                         View Results
                       </button>
                     </div>
                   </div>
+                  {/* Subtle hover overlay */}
+                  <div className="absolute inset-0 rounded-2xl pointer-events-none group-hover:bg-blue-50/10 transition-all duration-200" />
                 </div>
               ))}
             </div>

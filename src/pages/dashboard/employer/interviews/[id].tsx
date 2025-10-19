@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-monokai";
+import "ace-builds/src-noconflict/worker-javascript";
 import {
   FaBuilding,
   FaUsers,
@@ -261,6 +262,10 @@ const EmployerInterviewRoom: NextPage = () => {
                   readOnly
                   name="live-code-view"
                   editorProps={{ $blockScrolling: true }}
+                  setOptions={{
+                    showLineNumbers: true,
+                    tabSize: 2,
+                  }}
                   style={{ width: "100%", height: "400px", borderRadius: "0.5rem" }}
                 />
               </div>

@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import jsPDF from "jspdf";
 import Link from "next/link";
 import Image from 'next/image';
-import { FaBars, FaUser, FaGraduationCap, FaBriefcase, FaPhone, FaCheck, FaFileAlt, FaSearch, FaClipboardList, FaVideo, FaTrophy, FaBell, FaSave } from "react-icons/fa";
+import { FaBars, FaUser, FaGraduationCap,FaHome, FaBriefcase, FaPhone, FaCheck, FaFileAlt, FaSearch, FaClipboardList, FaVideo, FaTrophy, FaBell, FaSave } from "react-icons/fa";
 import type { CSSProperties } from 'react';
 
 interface PersonalInfo {
@@ -367,7 +367,7 @@ const ResumeBuilderPage: NextPage = () => {
       items: [
         { href: "/jobs", label: "Job Search & Matching", icon: <FaSearch /> },
         { href: "/dashboard/student/applications", label: "Applications", icon: <FaClipboardList /> },
-        { href: "/dashboard/student/interview-practise", label: "Interviews", icon: <FaVideo /> },
+        { href: "/dashboard/student/interview-preactise", label: "Practise Interviews", icon: <FaVideo /> },
       ]
     },
     {
@@ -491,6 +491,25 @@ const ResumeBuilderPage: NextPage = () => {
 
         {/* Navigation Groups */}
         <div className="space-y-4">
+          {/* Home Link */}
+          <div className="mb-6">
+            <Link
+              href="/dashboard/student"
+              className="block"
+            >
+              <div 
+                style={{
+                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1))",
+                  backdropFilter: "blur(8px)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                }}
+                className="px-4 py-3 rounded-lg hover:bg-white/20 transition-all duration-300 flex items-center gap-3"
+              >
+                <span className="text-xl text-white"><FaHome /></span>
+                <span className="text-white font-medium">Dashboard Home</span>
+              </div>
+            </Link>
+          </div>
           {navigationGroups.map((group, groupIndex) => (
             <div key={groupIndex} className="mb-6">
               <div className="px-4 py-2 text-sm font-semibold text-white uppercase tracking-wider mb-3">
@@ -536,306 +555,321 @@ const ResumeBuilderPage: NextPage = () => {
         backgroundRepeat: 'no-repeat',
         backgroundAttachment: 'fixed'
       }}>
-        {/* Horizontal Tabs */}
-        <div style={styles.tabContainer}>
-          <div style={styles.tabList}>
-            {sections.map((section) => (
-              <button
-                key={section.id}
-                onClick={() => setActiveSection(section.id)}
-                style={{
-                  ...styles.tab,
-                  ...(activeSection === section.id ? styles.activeTab : {})
-                }}
-              >
-                <span>{section.icon}</span>
-                <span>{section.title}</span>
-                {progress[section.id] && (
-                  <FaCheck className="text-green-500 ml-2" size={12} />
-                )}
-              </button>
-            ))}
+        {/* Blurred overlay for background image */}
+        <div
+          style={{
+            position: 'fixed',
+            top: '75px',
+            left: '256px',
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            backdropFilter: 'blur(8px)',
+            pointerEvents: 'none'
+          }}
+        />
+        {/* Main CV content stays sharp above the blurred background */}
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          {/* Horizontal Tabs */}
+          <div style={styles.tabContainer}>
+            <div style={styles.tabList}>
+              {sections.map((section) => (
+                <button
+                  key={section.id}
+                  onClick={() => setActiveSection(section.id)}
+                  style={{
+                    ...styles.tab,
+                    ...(activeSection === section.id ? styles.activeTab : {})
+                  }}
+                >
+                  <span>{section.icon}</span>
+                  <span>{section.title}</span>
+                  {progress[section.id] && (
+                    <FaCheck className="text-green-500 ml-2" size={12} />
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Form Content */}
-        <div className="p-6">
-          <div className="max-w-4xl mx-auto">
-            {/* Form Content - Replace the existing form sections with these styled versions */}
-            {activeSection === 'personal' && (
-              <div className="space-y-6">
-                <div style={styles.card}>
-                  <h2 style={styles.sectionHeader}>Personal Information</h2>
-                  <div className="grid grid-cols-2 gap-6">
-                    <div style={styles.formGroup}>
-                      <label style={styles.label} htmlFor="name">Name</label>
-                      <input
-                        id="name"
-                        name="name"
-                        value={formState.personal.name}
-                        onChange={handlePersonalChange}
-                        placeholder="Enter your name"
-                        style={styles.input}
-                      />
-                    </div>
-                    <div style={styles.formGroup}>
-                      <label style={styles.label} htmlFor="email">Email</label>
-                      <input
-                        id="email"
-                        name="email"
-                        value={formState.personal.email}
-                        onChange={handlePersonalChange}
-                        placeholder="Enter your email"
-                        style={styles.input}
-                      />
-                    </div>
-                    <div style={styles.formGroup}>
-                      <label style={styles.label} htmlFor="phone">Phone</label>
-                      <input
-                        id="phone"
-                        name="phone"
-                        value={formState.personal.phone}
-                        onChange={handlePersonalChange}
-                        placeholder="Enter your phone number"
-                        style={styles.input}
-                      />
-                    </div>
-                    <div style={styles.formGroup}>
-                      <label style={styles.label} htmlFor="address">Address</label>
-                      <input
-                        id="address"
-                        name="address"
-                        value={formState.personal.address}
-                        onChange={handlePersonalChange}
-                        placeholder="Enter your address"
-                        style={styles.input}
-                      />
+          {/* Form Content */}
+          <div className="p-6">
+            <div className="max-w-4xl mx-auto">
+              {/* Form Content - Replace the existing form sections with these styled versions */}
+              {activeSection === 'personal' && (
+                <div className="space-y-6">
+                  <div style={styles.card}>
+                    <h2 style={styles.sectionHeader}>Personal Information</h2>
+                    <div className="grid grid-cols-2 gap-6">
+                      <div style={styles.formGroup}>
+                        <label style={styles.label} htmlFor="name">Name</label>
+                        <input
+                          id="name"
+                          name="name"
+                          value={formState.personal.name}
+                          onChange={handlePersonalChange}
+                          placeholder="Enter your name"
+                          style={styles.input}
+                        />
+                      </div>
+                      <div style={styles.formGroup}>
+                        <label style={styles.label} htmlFor="email">Email</label>
+                        <input
+                          id="email"
+                          name="email"
+                          value={formState.personal.email}
+                          onChange={handlePersonalChange}
+                          placeholder="Enter your email"
+                          style={styles.input}
+                        />
+                      </div>
+                      <div style={styles.formGroup}>
+                        <label style={styles.label} htmlFor="phone">Phone</label>
+                        <input
+                          id="phone"
+                          name="phone"
+                          value={formState.personal.phone}
+                          onChange={handlePersonalChange}
+                          placeholder="Enter your phone number"
+                          style={styles.input}
+                        />
+                      </div>
+                      <div style={styles.formGroup}>
+                        <label style={styles.label} htmlFor="address">Address</label>
+                        <input
+                          id="address"
+                          name="address"
+                          value={formState.personal.address}
+                          onChange={handlePersonalChange}
+                          placeholder="Enter your address"
+                          style={styles.input}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-            {activeSection === 'education' && (
-              <div className="space-y-6">
-                <div style={styles.card}>
-                  <h2 style={styles.sectionHeader}>Education</h2>
-                  {formState.education.map((edu, index) => (
-                    <div key={index} className="grid grid-cols-2 gap-6">
-                      <div style={styles.formGroup}>
-                        <label style={styles.label} htmlFor={`institution-${index}`}>Institution</label>
-                        <input
-                          id={`institution-${index}`}
-                          value={edu.institution}
-                          onChange={(e) => updateEducation(index, "institution", e.target.value)}
-                          placeholder="Enter institution name"
-                          style={styles.input}
-                        />
+              )}
+              {activeSection === 'education' && (
+                <div className="space-y-6">
+                  <div style={styles.card}>
+                    <h2 style={styles.sectionHeader}>Education</h2>
+                    {formState.education.map((edu, index) => (
+                      <div key={index} className="grid grid-cols-2 gap-6">
+                        <div style={styles.formGroup}>
+                          <label style={styles.label} htmlFor={`institution-${index}`}>Institution</label>
+                          <input
+                            id={`institution-${index}`}
+                            value={edu.institution}
+                            onChange={(e) => updateEducation(index, "institution", e.target.value)}
+                            placeholder="Enter institution name"
+                            style={styles.input}
+                          />
+                        </div>
+                        <div style={styles.formGroup}>
+                          <label style={styles.label} htmlFor={`degree-${index}`}>Degree</label>
+                          <input
+                            id={`degree-${index}`}
+                            value={edu.degree}
+                            onChange={(e) => updateEducation(index, "degree", e.target.value)}
+                            placeholder="Enter degree obtained"
+                            style={styles.input}
+                          />
+                        </div>
+                        <div style={styles.formGroup}>
+                          <label style={styles.label} htmlFor={`year-${index}`}>Year</label>
+                          <input
+                            id={`year-${index}`}
+                            value={edu.year}
+                            onChange={(e) => updateEducation(index, "year", e.target.value)}
+                            placeholder="Enter year of graduation"
+                            style={styles.input}
+                          />
+                        </div>
                       </div>
-                      <div style={styles.formGroup}>
-                        <label style={styles.label} htmlFor={`degree-${index}`}>Degree</label>
-                        <input
-                          id={`degree-${index}`}
-                          value={edu.degree}
-                          onChange={(e) => updateEducation(index, "degree", e.target.value)}
-                          placeholder="Enter degree obtained"
-                          style={styles.input}
-                        />
-                      </div>
-                      <div style={styles.formGroup}>
-                        <label style={styles.label} htmlFor={`year-${index}`}>Year</label>
-                        <input
-                          id={`year-${index}`}
-                          value={edu.year}
-                          onChange={(e) => updateEducation(index, "year", e.target.value)}
-                          placeholder="Enter year of graduation"
-                          style={styles.input}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                  <button onClick={addEducation} className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    Add Education
-                  </button>
+                    ))}
+                    <button onClick={addEducation} className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                      Add Education
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
-            {activeSection === 'experience' && (
-              <div className="space-y-6">
-                <div style={styles.card}>
-                  <h2 style={styles.sectionHeader}>Experience</h2>
-                  {formState.experience.map((exp, index) => (
-                    <div key={index} className="grid grid-cols-2 gap-6">
-                      <div style={styles.formGroup}>
-                        <label style={styles.label} htmlFor={`company-${index}`}>Company</label>
-                        <input
-                          id={`company-${index}`}
-                          value={exp.company}
-                          onChange={(e) => updateExperience(index, "company", e.target.value)}
-                          placeholder="Enter company name"
-                          style={styles.input}
-                        />
+              )}
+              {activeSection === 'experience' && (
+                <div className="space-y-6">
+                  <div style={styles.card}>
+                    <h2 style={styles.sectionHeader}>Experience</h2>
+                    {formState.experience.map((exp, index) => (
+                      <div key={index} className="grid grid-cols-2 gap-6">
+                        <div style={styles.formGroup}>
+                          <label style={styles.label} htmlFor={`company-${index}`}>Company</label>
+                          <input
+                            id={`company-${index}`}
+                            value={exp.company}
+                            onChange={(e) => updateExperience(index, "company", e.target.value)}
+                            placeholder="Enter company name"
+                            style={styles.input}
+                          />
+                        </div>
+                        <div style={styles.formGroup}>
+                          <label style={styles.label} htmlFor={`role-${index}`}>Role</label>
+                          <input
+                            id={`role-${index}`}
+                            value={exp.role}
+                            onChange={(e) => updateExperience(index, "role", e.target.value)}
+                            placeholder="Enter your role"
+                            style={styles.input}
+                          />
+                        </div>
+                        <div style={styles.formGroup}>
+                          <label style={styles.label} htmlFor={`duration-${index}`}>Duration</label>
+                          <input
+                            id={`duration-${index}`}
+                            value={exp.duration}
+                            onChange={(e) => updateExperience(index, "duration", e.target.value)}
+                            placeholder="Enter duration of employment"
+                            style={styles.input}
+                          />
+                        </div>
+                        <div style={styles.formGroup}>
+                          <label style={styles.label} htmlFor={`description-${index}`}>Description</label>
+                          <textarea
+                            id={`description-${index}`}
+                            value={exp.description}
+                            onChange={(e) => updateExperience(index, "description", e.target.value)}
+                            placeholder="Enter job description"
+                            style={{ ...styles.input, height: '100px' }}
+                          />
+                        </div>
                       </div>
-                      <div style={styles.formGroup}>
-                        <label style={styles.label} htmlFor={`role-${index}`}>Role</label>
-                        <input
-                          id={`role-${index}`}
-                          value={exp.role}
-                          onChange={(e) => updateExperience(index, "role", e.target.value)}
-                          placeholder="Enter your role"
-                          style={styles.input}
-                        />
-                      </div>
-                      <div style={styles.formGroup}>
-                        <label style={styles.label} htmlFor={`duration-${index}`}>Duration</label>
-                        <input
-                          id={`duration-${index}`}
-                          value={exp.duration}
-                          onChange={(e) => updateExperience(index, "duration", e.target.value)}
-                          placeholder="Enter duration of employment"
-                          style={styles.input}
-                        />
-                      </div>
-                      <div style={styles.formGroup}>
-                        <label style={styles.label} htmlFor={`description-${index}`}>Description</label>
-                        <textarea
-                          id={`description-${index}`}
-                          value={exp.description}
-                          onChange={(e) => updateExperience(index, "description", e.target.value)}
-                          placeholder="Enter job description"
-                          style={{ ...styles.input, height: '100px' }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                  <button onClick={addExperience} className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    Add Experience
-                  </button>
+                    ))}
+                    <button onClick={addExperience} className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                      Add Experience
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
-            {activeSection === 'contact' && (
-              <div className="space-y-6">
-                <div style={styles.card}>
-                  <h2 style={styles.sectionHeader}>Contact Information</h2>
-                  <div className="grid grid-cols-2 gap-6">
-                    <div style={styles.formGroup}>
-                      <label style={styles.label} htmlFor="phone">Phone</label>
-                      <input
-                        id="phone"
-                        name="phone"
-                        value={formState.personal.phone}
-                        onChange={handlePersonalChange}
-                        placeholder="Enter your phone number"
-                        style={styles.input}
-                      />
-                    </div>
-                    <div style={styles.formGroup}>
-                      <label style={styles.label} htmlFor="address">Address</label>
-                      <input
-                        id="address"
-                        name="address"
-                        value={formState.personal.address}
-                        onChange={handlePersonalChange}
-                        placeholder="Enter your address"
-                        style={styles.input}
-                      />
+              )}
+              {activeSection === 'contact' && (
+                <div className="space-y-6">
+                  <div style={styles.card}>
+                    <h2 style={styles.sectionHeader}>Contact Information</h2>
+                    <div className="grid grid-cols-2 gap-6">
+                      <div style={styles.formGroup}>
+                        <label style={styles.label} htmlFor="phone">Phone</label>
+                        <input
+                          id="phone"
+                          name="phone"
+                          value={formState.personal.phone}
+                          onChange={handlePersonalChange}
+                          placeholder="Enter your phone number"
+                          style={styles.input}
+                        />
+                      </div>
+                      <div style={styles.formGroup}>
+                        <label style={styles.label} htmlFor="address">Address</label>
+                        <input
+                          id="address"
+                          name="address"
+                          value={formState.personal.address}
+                          onChange={handlePersonalChange}
+                          placeholder="Enter your address"
+                          style={styles.input}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-            {activeSection === 'preview' && (
-              <div className="space-y-6">
-                <div style={previewStyles.container}>
-                  <div style={previewStyles.header}>
-                    <img 
-                      src={session?.user?.image || "https://www.gravatar.com/avatar/?d=mp"}
-                      alt="Profile"
-                      style={previewStyles.profileImage}
-                    />
-                    <div style={previewStyles.headerInfo}>
-                      <h2 style={previewStyles.name}>{formState.personal.name}</h2>
-                      <p style={previewStyles.email}>{formState.personal.email}</p>
-                      <p style={previewStyles.email}>{formState.personal.phone}</p>
-                      <p style={previewStyles.email}>{formState.personal.address}</p>
-                    </div>
-                  </div>
-
-                  <div style={previewStyles.twoColumnLayout}>
-                    <div>
-                      {/* Left Column */}
-                      <div style={previewStyles.section}>
-                        <h3 style={previewStyles.sectionTitle}>Education</h3>
-                        {formState.education.map((edu, index) => (
-                          <div key={index} className="mb-4">
-                            <div className="text-base font-medium text-gray-900">
-                              {edu.degree}
-                            </div>
-                            <div className="text-sm text-gray-600">
-                              {edu.institution}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              {edu.year}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div style={previewStyles.section}>
-                        <h3 style={previewStyles.sectionTitle}>Work History</h3>
-                        {formState.experience.map((exp, index) => (
-                          <div key={index} className="mb-4">
-                            <div className="text-base font-medium text-gray-900">
-                              {exp.role}
-                            </div>
-                            <div className="text-sm text-gray-600">
-                              {exp.company}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              {exp.duration}
-                            </div>
-                            <p className="mt-2 text-sm text-gray-600">
-                              {exp.description}
-                            </p>
-                          </div>
-                        ))}
+              )}
+              {activeSection === 'preview' && (
+                <div className="space-y-6">
+                  <div style={previewStyles.container}>
+                    <div style={previewStyles.header}>
+                      <img 
+                        src={session?.user?.image || "https://www.gravatar.com/avatar/?d=mp"}
+                        alt="Profile"
+                        style={previewStyles.profileImage}
+                      />
+                      <div style={previewStyles.headerInfo}>
+                        <h2 style={previewStyles.name}>{formState.personal.name}</h2>
+                        <p style={previewStyles.email}>{formState.personal.email}</p>
+                        <p style={previewStyles.email}>{formState.personal.phone}</p>
+                        <p style={previewStyles.email}>{formState.personal.address}</p>
                       </div>
                     </div>
 
-                    <div>
-                      {/* Right Column */}
-                      <div style={previewStyles.section}>
-                        <h3 style={previewStyles.sectionTitle}>Technical Skills</h3>
-                        <div style={previewStyles.skillsList}>
-                          {formState.skills.map((skill, index) => (
-                            <span key={index} style={previewStyles.skillItem}>
-                              {skill}
-                            </span>
+                    <div style={previewStyles.twoColumnLayout}>
+                      <div>
+                        {/* Left Column */}
+                        <div style={previewStyles.section}>
+                          <h3 style={previewStyles.sectionTitle}>Education</h3>
+                          {formState.education.map((edu, index) => (
+                            <div key={index} className="mb-4">
+                              <div className="text-base font-medium text-gray-900">
+                                {edu.degree}
+                              </div>
+                              <div className="text-sm text-gray-600">
+                                {edu.institution}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                {edu.year}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div style={previewStyles.section}>
+                          <h3 style={previewStyles.sectionTitle}>Work History</h3>
+                          {formState.experience.map((exp, index) => (
+                            <div key={index} className="mb-4">
+                              <div className="text-base font-medium text-gray-900">
+                                {exp.role}
+                              </div>
+                              <div className="text-sm text-gray-600">
+                                {exp.company}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                {exp.duration}
+                              </div>
+                              <p className="mt-2 text-sm text-gray-600">
+                                {exp.description}
+                              </p>
+                            </div>
                           ))}
                         </div>
                       </div>
 
-                      <div style={previewStyles.section}>
-                        <h3 style={previewStyles.sectionTitle}>Certification</h3>
-                        {/* Add certification section if needed */}
+                      <div>
+                        {/* Right Column */}
+                        <div style={previewStyles.section}>
+                          <h3 style={previewStyles.sectionTitle}>Technical Skills</h3>
+                          <div style={previewStyles.skillsList}>
+                            {formState.skills.map((skill, index) => (
+                              <span key={index} style={previewStyles.skillItem}>
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div style={previewStyles.section}>
+                          <h3 style={previewStyles.sectionTitle}>Certification</h3>
+                          {/* Add certification section if needed */}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex justify-end space-x-4">
-                  <button
-                    onClick={generatePDF}
-                    className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  >
-                    Download PDF
-                  </button>
+                  <div className="flex justify-end space-x-4">
+                    <button
+                      onClick={generatePDF}
+                      className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      Download PDF
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
-
         {/* Save Progress Button */}
         <button
           onClick={saveProgress}

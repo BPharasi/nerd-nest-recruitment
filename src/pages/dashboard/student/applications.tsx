@@ -16,7 +16,7 @@ import {
   FaClock,
   FaTimesCircle,
   FaHourglass,
-  FaMapMarkerAlt,
+  FaMapMarkerAlt,FaHome
 } from "react-icons/fa";
 import { useRouter } from 'next/router';
 
@@ -78,7 +78,7 @@ const ApplicationsPage: NextPage = () => {
       items: [
         { href: "/jobs", label: "Job Search & Matching", icon: <FaSearch /> },
         { href: "/dashboard/student/applications", label: "Applications", icon: <FaClipboardList /> },
-        { href: "/dashboard/student/interview-practise", label: "Interviews", icon: <FaVideo /> },
+        { href: "/dashboard/student/interview-practise", label: "Practise Interviews", icon: <FaVideo /> },
       ]
     },
     {
@@ -212,6 +212,25 @@ const ApplicationsPage: NextPage = () => {
 
         {/* Navigation Groups */}
         <div className="space-y-4">
+          {/* Home Link */}
+          <div className="mb-6">
+            <Link
+              href="/dashboard/student"
+              className="block"
+            >
+              <div 
+                style={{
+                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1))",
+                  backdropFilter: "blur(8px)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                }}
+                className="px-4 py-3 rounded-lg hover:bg-white/20 transition-all duration-300 flex items-center gap-3"
+              >
+                <span className="text-xl text-white"><FaHome /></span>
+                <span className="text-white font-medium">Dashboard Home</span>
+              </div>
+            </Link>
+          </div>
           {navigationGroups.map((group, groupIndex) => (
             <div key={groupIndex} className="mb-6">
               <div className="px-4 py-2 text-sm font-semibold text-white uppercase tracking-wider mb-3">
@@ -252,9 +271,26 @@ const ApplicationsPage: NextPage = () => {
         left: '256px',
         overflowY: 'auto',
         padding: '2rem',
-        background: '#f9fafb'
+        backgroundImage: "url('/images/skills_background(1).png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed'
       }}>
-        <div className="max-w-7xl mx-auto">
+        {/* Blurred overlay for background image */}
+        <div
+          style={{
+            position: 'fixed',
+            top: '75px',
+            left: '256px',
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            backdropFilter: 'blur(8px)',
+            pointerEvents: 'none'
+          }}
+        />
+        <div className="max-w-7xl mx-auto" style={{ position: 'relative', zIndex: 1 }}>
           {/* Page Title */}
           <h1 className="text-2xl font-bold text-gray-900 mb-8">Applications Tracking</h1>
 
@@ -378,7 +414,7 @@ const ApplicationsPage: NextPage = () => {
               <div
                 key={application.id}
                 style={{
-                  background: "linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(6, 182, 212, 0.2))",
+                  background: "linear-gradient(135deg, rgba(20, 184, 166, 0.4), rgba(6, 182, 212, 0.4))",
                   backdropFilter: "blur(8px)",
                   border: "1px solid rgba(20, 184, 166, 0.3)",
                   margin: '0.5rem',
@@ -470,32 +506,32 @@ const ApplicationsPage: NextPage = () => {
                           justifyContent: 'space-between',
                           marginTop: '24px',
                           paddingTop: '24px',
-                          borderTop: '1px solid rgba(20, 184, 166, 0.2)',
+                          borderTop: '1px solid rgba(20,184,166,0.2)',
                           gap: '24px'
                         }}
                         >
                         <button
                           type="button"
                           style={{
-                          background: 'linear-gradient(to right, #2563eb, #60a5fa)',
-                          color: 'white',
-                          padding: '12px 24px',
-                          borderRadius: '12px',
-                          border: 'none',
-                          fontWeight: '500',
-                          textAlign: 'center',
-                          minWidth: '140px',
-                          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                          cursor: 'pointer',
-                          transition: 'all 0.3s ease'
+                            background: 'linear-gradient(90deg, #14b8a6 0%, #06b6d4 100%)',
+                            color: 'white',
+                            padding: '12px 24px',
+                            borderRadius: '999px',
+                            border: 'none',
+                            fontWeight: '600',
+                            textAlign: 'center',
+                            minWidth: '140px',
+                            boxShadow: '0 4px 12px rgba(20,184,166,0.15)',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s'
                           }}
-                          onMouseEnter={(e) => {
-                          e.currentTarget.style.background = 'linear-gradient(to right, #1d4ed8, #3b82f6)';
-                          e.currentTarget.style.boxShadow = '0 8px 12px rgba(0, 0, 0, 0.15)';
+                          onMouseEnter={e => {
+                            e.currentTarget.style.background = 'linear-gradient(90deg, #06b6d4 0%, #14b8a6 100%)';
+                            e.currentTarget.style.boxShadow = '0 8px 16px rgba(20,184,166,0.25)';
                           }}
-                          onMouseLeave={(e) => {
-                          e.currentTarget.style.background = 'linear-gradient(to right, #2563eb, #60a5fa)';
-                          e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+                          onMouseLeave={e => {
+                            e.currentTarget.style.background = 'linear-gradient(90deg, #14b8a6 0%, #06b6d4 100%)';
+                            e.currentTarget.style.boxShadow = '0 4px 12px rgba(20,184,166,0.15)';
                           }}
                           onClick={() => handleViewDetails(application.id)}
                         >
@@ -505,25 +541,25 @@ const ApplicationsPage: NextPage = () => {
                           <button
                           type="button"
                           style={{
-                            background: 'linear-gradient(to right, #10b981, #14b8a6)',
+                            background: 'linear-gradient(90deg, #10b981 0%, #14b8a6 100%)',
                             color: 'white',
                             padding: '12px 24px',
-                            borderRadius: '12px',
+                            borderRadius: '999px',
                             border: 'none',
-                            fontWeight: '500',
+                            fontWeight: '600',
                             textAlign: 'center',
                             minWidth: '140px',
-                            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                            boxShadow: '0 4px 12px rgba(16,185,129,0.15)',
                             cursor: 'pointer',
-                            transition: 'all 0.3s ease'
+                            transition: 'all 0.2s'
                           }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = 'linear-gradient(to right, #059669, #0d9488)';
-                            e.currentTarget.style.boxShadow = '0 8px 12px rgba(0, 0, 0, 0.15)';
+                          onMouseEnter={e => {
+                            e.currentTarget.style.background = 'linear-gradient(90deg, #14b8a6 0%, #10b981 100%)';
+                            e.currentTarget.style.boxShadow = '0 8px 16px rgba(16,185,129,0.25)';
                           }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = 'linear-gradient(to right, #10b981, #14b8a6)';
-                            e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+                          onMouseLeave={e => {
+                            e.currentTarget.style.background = 'linear-gradient(90deg, #10b981 0%, #14b8a6 100%)';
+                            e.currentTarget.style.boxShadow = '0 4px 12px rgba(16,185,129,0.15)';
                           }}
                           onClick={() => window.location.href = `/dashboard/student/interviews/${application.id}`}
                           >

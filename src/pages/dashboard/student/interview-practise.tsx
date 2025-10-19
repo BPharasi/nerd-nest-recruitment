@@ -8,7 +8,7 @@ import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-github";
 import Header from "@/components/Header";
 import Link from "next/link";
-import { FaUser, FaFileAlt, FaSearch, FaClipboardList, FaVideo, FaTrophy, FaBell } from "react-icons/fa";
+import { FaUser, FaFileAlt, FaSearch, FaClipboardList, FaVideo, FaTrophy, FaBell, FaHome } from "react-icons/fa";
 
 interface PracticeQuestion {
   id: number;
@@ -123,7 +123,7 @@ const InterviewPracticePage: NextPage = () => {
       items: [
         { href: "/jobs", label: "Job Search & Matching", icon: <FaSearch /> },
         { href: "/dashboard/student/applications", label: "Applications", icon: <FaClipboardList /> },
-        { href: "/dashboard/student/interview-practise", label: "Interviews", icon: <FaVideo /> },
+        { href: "/dashboard/student/interview-practise", label: "Practise Interviews", icon: <FaVideo /> },
       ]
     },
     {
@@ -134,12 +134,6 @@ const InterviewPracticePage: NextPage = () => {
       ]
     }
   ];
-
-  if (status === "loading") return <div>Loading...</div>;
-  if (status === "unauthenticated" || session?.user?.role !== "Student") {
-    router.push("/auth/signin");
-    return null;
-  }
 
   const requestPermissions = async () => {
     try {
@@ -184,15 +178,28 @@ const InterviewPracticePage: NextPage = () => {
     setIsRecording(false);
   };
 
+  // All hooks must be called before any return
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (timer > 0) {
+    if (timer > 0 && isRecording) {
       interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
-    } else if (isRecording) {
+    } else if (isRecording && timer === 0) {
       stopRecording();
     }
     return () => clearInterval(interval);
   }, [timer, isRecording]);
+
+  // Move authentication check after all hooks
+  if (status === "loading") return <div>Loading...</div>;
+  if (
+    status === "unauthenticated" ||
+    session?.user?.role !== "Student"
+  ) {
+    if (typeof window !== "undefined" && window.location.pathname !== "/dashboard/student/interview-practise") {
+      router.push("/auth/signin");
+    }
+    return null;
+  }
 
   return (
     <div style={{ height: '100vh', width: '100vw', overflow: 'hidden', background: '#f9fafb' }}>
@@ -271,6 +278,25 @@ const InterviewPracticePage: NextPage = () => {
 
         {/* Navigation Groups */}
         <div className="space-y-4">
+          {/* Home Link */}
+          <div className="mb-6">
+            <Link
+              href="/dashboard/student"
+              className="block"
+            >
+              <div 
+                style={{
+                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1))",
+                  backdropFilter: "blur(8px)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                }}
+                className="px-4 py-3 rounded-lg hover:bg-white/20 transition-all duration-300 flex items-center gap-3"
+              >
+                <span className="text-xl text-white"><FaHome /></span>
+                <span className="text-white font-medium">Dashboard Home</span>
+              </div>
+            </Link>
+          </div>
           {navigationGroups.map((group, groupIndex) => (
             <div key={groupIndex} className="mb-6">
               <div className="px-4 py-2 text-sm font-semibold text-white uppercase tracking-wider mb-3">
@@ -311,9 +337,26 @@ const InterviewPracticePage: NextPage = () => {
         left: '256px',
         overflowY: 'auto',
         padding: '2rem',
-        background: '#f9fafb'
+        backgroundImage: "url('/images/skills_background(1).png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed'
       }}>
-        <div className="max-w-7xl mx-auto">
+        {/* Blurred overlay for background image */}
+        <div
+          style={{
+            position: 'fixed',
+            top: '75px',
+            left: '256px',
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            backdropFilter: 'blur(8px)',
+            pointerEvents: 'none'
+          }}
+        />
+        <div className="max-w-7xl mx-auto" style={{ position: 'relative', zIndex: 1 }}>
           <h1 className="text-2xl font-bold text-gray-900 mb-8">Interview Practice</h1>
 
             {/* Category Selection */}

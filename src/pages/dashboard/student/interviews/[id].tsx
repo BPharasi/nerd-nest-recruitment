@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-monokai";
+import "ace-builds/src-noconflict/worker-javascript";
 import { 
   FaUser, 
   FaFileAlt, 
@@ -22,7 +23,7 @@ import {
   FaMicrophoneSlash, 
   FaVideoSlash, 
   FaExpand,
-  FaSpinner 
+  FaSpinner ,FaHome
 } from "react-icons/fa";
 
 const InterviewRoom: NextPage = () => {
@@ -33,6 +34,24 @@ const InterviewRoom: NextPage = () => {
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [activeTab, setActiveTab] = useState<'video' | 'code' | 'chat'>('video');
   const [code, setCode] = useState("");
+
+  // Poll for live code updates from localStorage
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const liveCode = localStorage.getItem(`interview-${id}-code`);
+      if (liveCode && liveCode !== code) {
+        setCode(liveCode);
+      }
+    }, 1000); // Check every second
+
+    return () => clearInterval(interval);
+  }, [id, code]);
+
+  // Save code to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem(`interview-${id}-code`, code);
+  }, [code, id]);
+
   const [chatMessages, setChatMessages] = useState<Array<{sender: string; message: string}>>([]);
   const [newMessage, setNewMessage] = useState("");
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -138,7 +157,7 @@ const InterviewRoom: NextPage = () => {
       items: [
         { href: "/jobs", label: "Job Search & Matching", icon: <FaSearch /> },
         { href: "/dashboard/student/applications", label: "Applications", icon: <FaClipboardList /> },
-        { href: "/dashboard/student/interview-practise", label: "Interviews", icon: <FaVideo /> },
+        { href: "/dashboard/student/interview-practise", label: "Practise Interviews", icon: <FaVideo /> },
       ]
     },
     {
@@ -245,7 +264,7 @@ const InterviewRoom: NextPage = () => {
             {/* Avatar and Name Display */}
             <div className="w-24 h-24 rounded-full overflow-hidden mb-2">
               <img 
-                src="/images/avatar-placeholder.jpg" 
+                src={session?.user?.image || "https://www.gravatar.com/avatar/?d=mp"} 
                 alt="Avatar"
                 className="w-full h-full object-cover"
               />
@@ -259,6 +278,25 @@ const InterviewRoom: NextPage = () => {
 
         {/* Navigation Groups */}
         <div className="space-y-4">
+          {/* Home Link */}
+          <div className="mb-6">
+            <Link
+              href="/dashboard/student"
+              className="block"
+            >
+              <div 
+                style={{
+                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1))",
+                  backdropFilter: "blur(8px)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                }}
+                className="px-4 py-3 rounded-lg hover:bg-white/20 transition-all duration-300 flex items-center gap-3"
+              >
+                <span className="text-xl text-white"><FaHome /></span>
+                <span className="text-white font-medium">Dashboard Home</span>
+              </div>
+            </Link>
+          </div>
           {navigationGroups.map((group, groupIndex) => (
             <div key={groupIndex} className="mb-6">
               <div className="px-4 py-2 text-sm font-semibold text-white uppercase tracking-wider mb-3">
@@ -424,23 +462,20 @@ const InterviewRoom: NextPage = () => {
                 )}
 
                 {activeTab === 'code' && (
-                  <div className="h-full p-4">
+                  <div style={{ height: "600px", minHeight: 400, background: "#222", borderRadius: 12, overflow: "hidden" }}>
                     <AceEditor
                       mode="javascript"
                       theme="monokai"
                       value={code}
                       onChange={setCode}
-                      name="code-editor"
+                      name="live-code-editor"
                       editorProps={{ $blockScrolling: true }}
-                      style={{ width: '100%', height: '100%' }}
-                      fontSize={14}
+                      style={{ width: "100%", height: "100%" }}
+                      fontSize={16}
                       showPrintMargin={false}
                       showGutter={true}
                       highlightActiveLine={true}
                       setOptions={{
-                        enableBasicAutocompletion: true,
-                        enableLiveAutocompletion: true,
-                        enableSnippets: true,
                         showLineNumbers: true,
                         tabSize: 2,
                       }}
@@ -531,23 +566,26 @@ const InterviewRoom: NextPage = () => {
                                 employerVideoRef.current.play();
                             }
                         }}
-                        style={{ 
+                        style={{
                             flex: '1',
                             minWidth: '180px',
-                            background: activeTab === 'video' 
-                                ? 'linear-gradient(135deg, #3B82F6, #2563EB)'
+                            background: activeTab === 'video'
+                                ? 'linear-gradient(90deg, #14b8a6 0%, #06b6d4 100%)'
                                 : 'linear-gradient(135deg, rgba(55, 65, 81, 0.8), rgba(31, 41, 55, 0.8))',
+                            color: activeTab === 'video' ? '#fff' : '#cbd5e1',
                             boxShadow: activeTab === 'video'
-                                ? '0 4px 15px rgba(59, 130, 246, 0.5)'
-                                : '0 4px 15px rgba(0, 0, 0, 0.2)',
-                            border: '1px solid rgba(255, 255, 255, 0.1)',
-                            margin: '0 1rem'
+                                ? '0 4px 15px rgba(20,184,166,0.15)'
+                                : '0 2px 8px rgba(0,0,0,0.08)',
+                            border: 'none',
+                            margin: '0 1rem',
+                            borderRadius: '999px',
+                            fontWeight: 600,
+                            fontSize: '1.1rem',
+                            transition: 'all 0.2s',
+                            outline: 'none',
+                            cursor: 'pointer'
                         }}
-                        className={`px-8 py-4 rounded-xl flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-105 ${
-                            activeTab === 'video' 
-                                ? 'text-white' 
-                                : 'text-gray-300 hover:text-white'
-                        }`}
+                        className={`px-8 py-4 flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-105`}
                     >
                         <FaVideo className="text-xl" />
                         <span className="font-semibold tracking-wide">Video</span>
@@ -559,46 +597,52 @@ const InterviewRoom: NextPage = () => {
                                 setCode(`// Write your code here\nfunction solution() {\n  \n}`);
                             }
                         }}
-                        style={{ 
+                        style={{
                             flex: '1',
                             minWidth: '180px',
-                            background: activeTab === 'code' 
-                                ? 'linear-gradient(135deg, #3B82F6, #2563EB)'
+                            background: activeTab === 'code'
+                                ? 'linear-gradient(90deg, #14b8a6 0%, #06b6d4 100%)'
                                 : 'linear-gradient(135deg, rgba(55, 65, 81, 0.8), rgba(31, 41, 55, 0.8))',
+                            color: activeTab === 'code' ? '#fff' : '#cbd5e1',
                             boxShadow: activeTab === 'code'
-                                ? '0 4px 15px rgba(59, 130, 246, 0.5)'
-                                : '0 4px 15px rgba(0, 0, 0, 0.2)',
-                            border: '1px solid rgba(255, 255, 255, 0.1)',
-                            margin: '0 1rem'
+                                ? '0 4px 15px rgba(20,184,166,0.15)'
+                                : '0 2px 8px rgba(0,0,0,0.08)',
+                            border: 'none',
+                            margin: '0 1rem',
+                            borderRadius: '999px',
+                            fontWeight: 600,
+                            fontSize: '1.1rem',
+                            transition: 'all 0.2s',
+                            outline: 'none',
+                            cursor: 'pointer'
                         }}
-                        className={`px-8 py-4 rounded-xl flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-105 ${
-                            activeTab === 'code' 
-                                ? 'text-white' 
-                                : 'text-gray-300 hover:text-white'
-                        }`}
+                        className={`px-8 py-4 flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-105`}
                     >
                         <FaCode className="text-xl" />
                         <span className="font-semibold tracking-wide">Code</span>
                     </button>
                     <button
                         onClick={() => setActiveTab('chat')}
-                        style={{ 
+                        style={{
                             flex: '1',
                             minWidth: '180px',
-                            background: activeTab === 'chat' 
-                                ? 'linear-gradient(135deg, #3B82F6, #2563EB)'
+                            background: activeTab === 'chat'
+                                ? 'linear-gradient(90deg, #14b8a6 0%, #06b6d4 100%)'
                                 : 'linear-gradient(135deg, rgba(55, 65, 81, 0.8), rgba(31, 41, 55, 0.8))',
+                            color: activeTab === 'chat' ? '#fff' : '#cbd5e1',
                             boxShadow: activeTab === 'chat'
-                                ? '0 4px 15px rgba(59, 130, 246, 0.5)'
-                                : '0 4px 15px rgba(0, 0, 0, 0.2)',
-                            border: '1px solid rgba(255, 255, 255, 0.1)',
-                            margin: '0 1rem'
+                                ? '0 4px 15px rgba(20,184,166,0.15)'
+                                : '0 2px 8px rgba(0,0,0,0.08)',
+                            border: 'none',
+                            margin: '0 1rem',
+                            borderRadius: '999px',
+                            fontWeight: 600,
+                            fontSize: '1.1rem',
+                            transition: 'all 0.2s',
+                            outline: 'none',
+                            cursor: 'pointer'
                         }}
-                        className={`px-8 py-4 rounded-xl flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-105 ${
-                            activeTab === 'chat' 
-                                ? 'text-white' 
-                                : 'text-gray-300 hover:text-white'
-                        }`}
+                        className={`px-8 py-4 flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-105`}
                     >
                         <FaComments className="text-xl" />
                         <span className="font-semibold tracking-wide">Chat</span>

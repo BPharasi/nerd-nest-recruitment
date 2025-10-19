@@ -60,7 +60,7 @@ const StudentSkillsChallengesPage: NextPage = () => {
       items: [
         { href: "/jobs", label: "Job Search & Matching", icon: <FaSearch /> },
         { href: "/dashboard/student/applications", label: "Applications", icon: <FaClipboardList /> },
-        { href: "/dashboard/student/interviews", label: "Interviews", icon: <FaVideo /> },
+        { href: "/dashboard/student/interview-preactise", label: "Practise Interviews", icon: <FaVideo /> },
       ]
     },
     {
@@ -198,6 +198,7 @@ const StudentSkillsChallengesPage: NextPage = () => {
 
         {/* Navigation */}
         <div className="space-y-4">
+          
           {/* Home Link */}
           <div className="mb-6">
             <Link
@@ -265,7 +266,20 @@ const StudentSkillsChallengesPage: NextPage = () => {
           backgroundAttachment: "fixed"
         }}
       >
-        <div className="max-w-7xl mx-auto px-4">
+        {/* Blurred overlay for background image */}
+        <div
+          style={{
+            position: 'fixed',
+            top: '75px',
+            left: '256px',
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            backdropFilter: 'blur(8px)',
+            pointerEvents: 'none'
+          }}
+        />
+        <div className="max-w-7xl mx-auto px-4" style={{ position: 'relative', zIndex: 1 }}>
           {categories.map((category) => (
             <section 
               key={category.name} 
@@ -286,7 +300,7 @@ const StudentSkillsChallengesPage: NextPage = () => {
                   <div
                     key={challenge.id}
                     style={{
-                      background: "linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(6, 182, 212, 0.2))",
+                      background: "white/10",
                       backdropFilter: "blur(8px)",
                       border: "1px solid rgba(20, 184, 166, 0.3)",
                       margin: '0.5rem', // Reduced from 1rem
@@ -356,28 +370,28 @@ const StudentSkillsChallengesPage: NextPage = () => {
                         </div>
                         <button 
                           style={{
-                            background: 'linear-gradient(135deg, #64748b, #475569)',
+                            background: 'linear-gradient(90deg, #14b8a6 0%, #06b6d4 100%)',
                             color: 'white',
                             padding: '16px 32px',
-                            borderRadius: '16px',
+                            borderRadius: '999px',
                             fontSize: '18px',
                             fontWeight: '600',
                             border: 'none',
                             cursor: 'pointer',
-                            boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+                            boxShadow: '0 8px 16px rgba(20,184,166,0.15)',
                             transition: 'all 0.3s ease',
                             minWidth: '200px',
                             letterSpacing: '0.5px'
                           }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = 'linear-gradient(135deg, #475569, #334155)';
+                          onMouseEnter={e => {
+                            e.currentTarget.style.background = 'linear-gradient(90deg, #06b6d4 0%, #14b8a6 100%)';
                             e.currentTarget.style.transform = 'translateY(-2px)';
-                            e.currentTarget.style.boxShadow = '0 12px 20px rgba(0, 0, 0, 0.3)';
+                            e.currentTarget.style.boxShadow = '0 12px 20px rgba(20,184,166,0.25)';
                           }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = 'linear-gradient(135deg, #64748b, #475569)';
+                          onMouseLeave={e => {
+                            e.currentTarget.style.background = 'linear-gradient(90deg, #14b8a6 0%, #06b6d4 100%)';
                             e.currentTarget.style.transform = 'translateY(0)';
-                            e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)';
+                            e.currentTarget.style.boxShadow = '0 8px 16px rgba(20,184,166,0.15)';
                           }}
                           className="hover:shadow-xl transition-all duration-300"
                         >

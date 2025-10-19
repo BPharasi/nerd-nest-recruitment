@@ -16,7 +16,7 @@ import {
   FaSearch,
   FaClipboardList,
   FaTrophy,
-  FaBell 
+  FaBell, FaHome 
 } from "react-icons/fa";
 
 // Mock application data
@@ -67,7 +67,7 @@ const ApplicationDetailsPage: NextPage = () => {
       items: [
         { href: "/jobs", label: "Job Search & Matching", icon: <FaSearch /> },
         { href: "/dashboard/student/applications", label: "Applications", icon: <FaClipboardList /> },
-        { href: "/dashboard/student/interview-practise", label: "Interviews", icon: <FaVideo /> },
+        { href: "/dashboard/student/interview-practise", label: "Practise Interviews", icon: <FaVideo /> },
       ]
     },
     {
@@ -169,6 +169,25 @@ const ApplicationDetailsPage: NextPage = () => {
 
         {/* Navigation Groups */}
         <div className="space-y-4">
+          {/* Home Link */}
+          <div className="mb-6">
+            <Link
+              href="/dashboard/student"
+              className="block"
+            >
+              <div 
+                style={{
+                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1))",
+                  backdropFilter: "blur(8px)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                }}
+                className="px-4 py-3 rounded-lg hover:bg-white/20 transition-all duration-300 flex items-center gap-3"
+              >
+                <span className="text-xl text-white"><FaHome /></span>
+                <span className="text-white font-medium">Dashboard Home</span>
+              </div>
+            </Link>
+          </div>
           {navigationGroups.map((group, groupIndex) => (
             <div key={groupIndex} className="mb-6">
               <div className="px-4 py-2 text-sm font-semibold text-white uppercase tracking-wider mb-3">

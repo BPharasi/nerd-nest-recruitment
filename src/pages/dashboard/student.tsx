@@ -36,7 +36,7 @@ const skillChallenges = [
     title: "Generative AI",
     description: "Power up your AI career with expert-led learning",
     students: "1M+",
-    image: "/images/ai-course.jpg",
+    image: "/images/ai-course.jpeg",
     level: "Beginner"
   },
   {
@@ -44,7 +44,7 @@ const skillChallenges = [
     title: "IT Certifications",
     description: "Advance your career with in-demand certifications",
     students: "14.4M+",
-    image: "/images/it-cert.jpg",
+    image: "/images/it-cert.png",
     level: "Intermediate"
   },
   // Add more skill challenges as needed
@@ -101,7 +101,7 @@ const StudentDashboard: NextPage = () => {
     {
       id: 1,
       type: 'interview_offer',
-      title: 'Interview Opportunity! 🎉',
+      title: 'Interview Opportunity! ',
       message: 'Congratulations! You\'ve been selected for an interview based on your excellent performance in the "Build a React E-commerce Component" challenge.',
       challengeTitle: 'Build a React E-commerce Component',
       companyName: 'TechNova Solutions',
@@ -124,7 +124,7 @@ const StudentDashboard: NextPage = () => {
       items: [
         { href: "/jobs", label: "Job Search & Matching", icon: <FaSearch /> },
         { href: "/dashboard/student/applications", label: "Applications", icon: <FaClipboardList /> },
-        { href: "/dashboard/student/interview-practise", label: "Interviews", icon: <FaVideo /> },
+        { href: "/dashboard/student/interview-practise", label: "Practise Interviews", icon: <FaVideo /> },
       ]
     },
     {
@@ -224,15 +224,27 @@ const StudentDashboard: NextPage = () => {
                   <Link
                     key={index}
                     href={item.href}
-                    className="block"
+                    className="block group"
                   >
                     <div 
                       style={{
-                        background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))",
-                        backdropFilter: "blur(8px)",
-                        border: "1px solid rgba(255, 255, 255, 0.1)",
+                        background: "linear-gradient(90deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%)",
+                        border: "1px solid rgba(255,255,255,0.10)",
+                        borderLeft: "5px solid transparent",
+                        transition: "all 0.2s",
+                        position: "relative",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
+                        paddingLeft: "1.25rem"
                       }}
-                      className="px-4 py-3 rounded-lg hover:bg-white/20 transition-all duration-300 flex items-center gap-3"
+                      className="px-4 py-3 rounded-lg flex items-center gap-3 group-hover:bg-white/20 group-hover:border-l-teal-400"
+                      onMouseOver={e => {
+                        (e.currentTarget as HTMLElement).style.background = "linear-gradient(90deg, rgba(20,184,166,0.12) 0%, rgba(6,182,212,0.10) 100%)";
+                        (e.currentTarget as HTMLElement).style.borderLeft = "5px solid #14b8a6";
+                      }}
+                      onMouseOut={e => {
+                        (e.currentTarget as HTMLElement).style.background = "linear-gradient(90deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%)";
+                        (e.currentTarget as HTMLElement).style.borderLeft = "5px solid transparent";
+                      }}
                     >
                       <span className="text-lg text-white">{item.icon}</span>
                       <span className="text-white font-medium">{item.label}</span>
@@ -262,13 +274,41 @@ const StudentDashboard: NextPage = () => {
           backgroundAttachment: 'fixed'
         }}
       >
-        <div className="max-w-7xl mx-auto px-4">
+        <div
+          style={{
+            position: 'fixed',
+            top: '75px',
+            left: '256px',
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            backdropFilter: 'blur(8px)',
+            pointerEvents: 'none'
+          }}
+        />
+        <div className="max-w-7xl mx-auto px-4" style={{ position: 'relative', zIndex: 1 }}>
           {/* Hero Section */}
           <section className="mb-10">
             <div className="bg-gradient-to-r from-teal-600 to-cyan-600 rounded-xl p-6 text-white">
-              <h1 className="text-4xl font-bold mb-4">Master tomorrow's skills today</h1>
+              <h1 className="text-4xl font-bold mb-4 ">Master tomorrow's skills today</h1>
               <p className="text-lg mb-6 text-teal-50">Power up your AI, career, and life skills with the most up-to-date, expert-led learning.</p>
-              <button className="bg-white text-teal-700 px-6 py-2 rounded-lg font-semibold hover:bg-teal-50 transition-colors">
+              <button
+                style={{
+                  background: "linear-gradient(90deg, #6b7280 0%, #d1d5db 100%)",
+                  color: "#222",
+                  padding: "12px 36px",
+                  borderRadius: "999px",
+                  fontWeight: 700,
+                  fontSize: "1.15rem",
+                  boxShadow: "0 4px 16px rgba(107,114,128,0.15)",
+                  border: "none",
+                  transition: "all 0.2s",
+                  outline: "none",
+                  cursor: "pointer"
+                }}
+                onMouseOver={e => (e.currentTarget.style.background = "linear-gradient(90deg, #d1d5db 0%, #6b7280 100%)")}
+                onMouseOut={e => (e.currentTarget.style.background = "linear-gradient(90deg, #6b7280 0%, #d1d5db 100%)")}
+              >
                 Get started
               </button>
             </div>
@@ -277,13 +317,36 @@ const StudentDashboard: NextPage = () => {
           {/* Skills Challenges Section */}
           <section className="mb-12">
             <div className="bg-gradient-to-br from-teal-500/10 to-cyan-500/10 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-              <div className="flex justify-between items-center mb-6">
+              <div
+                className="flex justify-between items-center mb-6 flex-wrap gap-2"
+                style={{ rowGap: 12 }}
+              >
                 <h2 className="text-2xl font-bold text-white">Learn essential career and life skills</h2>
-                <div className="flex gap-2">
-                  <button className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white">
-                    <FaChevronLeft className="w-5 h-5" />
-                  </button>
-                  <button className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white">
+                <div
+                  className="flex gap-2 flex-wrap"
+                  style={{ minWidth: 0 }}
+                >
+                  
+                  <button
+                    style={{
+                      background: "linear-gradient(135deg, #6b7280 0%, #d1d5db 100%)",
+                      color: "#222",
+                      borderRadius: "50%",
+                      border: "none",
+                      width: "40px",
+                      height: "20px",
+                      minWidth: "40px",
+                      minHeight: "40px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      boxShadow: "0 2px 8px rgba(107,114,128,0.15)",
+                      transition: "all 0.2s",
+                      cursor: "pointer"
+                    }}
+                    onMouseOver={e => (e.currentTarget.style.background = "linear-gradient(135deg, #d1d5db 0%, #6b7280 100%)")}
+                    onMouseOut={e => (e.currentTarget.style.background = "linear-gradient(135deg, #6b7280 0%, #d1d5db 100%)")}
+                  >
                     <FaChevronRight className="w-5 h-5" />
                   </button>
                 </div>
@@ -294,23 +357,39 @@ const StudentDashboard: NextPage = () => {
                   <div
                     key={challenge.id}
                     style={{
-                      background: "linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(6, 182, 212, 0.2))",
+                      background: "linear-gradient(135deg, rgba(20, 184, 166, 0.5), rgba(6, 182, 212, 0.5))",
                       backdropFilter: "blur(8px)",
                       border: "1px solid rgba(20, 184, 166, 0.3)",
                     }}
-                    className="rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
+                    className="rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col"
                   >
-                    <div className="aspect-video relative overflow-hidden">
+                    {/* Image section: full width, fixed aspect ratio, rounded top corners */}
+                    <div
+                      style={{
+                        width: "100%",
+                        aspectRatio: "16/9",
+                        position: "relative",
+                        overflow: "hidden",
+                        borderTopLeftRadius: "0.75rem",
+                        borderTopRightRadius: "0.75rem",
+                        background: "#222"
+                      }}
+                    >
                       <img
                         src={challenge.image}
                         alt={challenge.title}
-                        className="w-full h-full object-cover"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          display: "block"
+                        }}
                       />
                     </div>
-                    <div className="p-5">
+                    <div className="p-5 flex-1 flex flex-col">
                       <h3 className="text-xl font-semibold mb-2 text-white">{challenge.title}</h3>
                       <p className="text-teal-50 mb-4">{challenge.description}</p>
-                      <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center justify-between text-sm mt-auto">
                         <span className="flex items-center text-teal-100">
                           <FaUsers className="mr-2" />
                           {challenge.students} students
@@ -330,9 +409,13 @@ const StudentDashboard: NextPage = () => {
           {notifications.length > 0 && (
             <section className="mb-12">
               <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-green-200/20">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold text-white">🔔 Recent Notifications</h2>
-                  <Link href="/dashboard/student/notifications" className="text-green-100 hover:text-white font-medium transition-colors">
+                <div className="flex justify-between items-center mb-6 flex-wrap gap-2">
+                  <h2 className="text-2xl font-bold text-white">Recent Notifications</h2>
+                  <Link
+                    href="/dashboard/student/notifications"
+                    className="text-green-100 hover:text-white font-medium transition-colors"
+                    style={{ minWidth: 120, textAlign: "center" }}
+                  >
                     View All
                   </Link>
                 </div>
@@ -363,13 +446,56 @@ const StudentDashboard: NextPage = () => {
                         </div>
                       )}
                       {notification.actionRequired && (
-                        <div className="flex gap-3">
-                          <button className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                        <div className="flex flex-wrap gap-3 justify-center">
+                          <button
+                            style={{
+                              background: "linear-gradient(90deg, #6b7280 0%, #d1d5db 100%)",
+                              color: "#222",
+                              padding: "10px 28px",
+                              borderRadius: "999px",
+                              fontWeight: 600,
+                                fontSize: "0.85rem",
+                                boxShadow: "none",
+                                transition: "all 0.2s",
+                                cursor: "pointer",
+                                minWidth: 60,
+                            }}
+                            onMouseOver={e => (e.currentTarget.style.background = "linear-gradient(90deg, #d1d5db 0%, #6b7280 100%)")}
+                            onMouseOut={e => (e.currentTarget.style.background = "linear-gradient(90deg, #6b7280 0%, #d1d5db 100%)")}
+                            className="font-medium"
+                          >
                             Accept Interview
                           </button>
-                          <button className="border border-green-300 text-green-100 hover:bg-green-400/20 px-6 py-2 rounded-lg font-medium transition-colors">
-                            View Details
-                          </button>
+                            <Link
+                              href="/dashboard/student/notifications"
+                              className="font-medium"
+                              style={{
+                                background: "transparent",
+                                color: "#6b7280",
+                                border: "2px solid #6b7280",
+                                padding: "4px 10px",
+                                borderRadius: "999px",
+                                fontWeight: 600,
+                                fontSize: "0.85rem",
+                                boxShadow: "none",
+                                transition: "all 0.2s",
+                                cursor: "pointer",
+                                minWidth: 60,
+                                display: "inline-block",
+                                textAlign: "center",
+                                textDecoration: "none"
+                              }}
+                              onMouseOver={e => {
+                                (e.currentTarget as HTMLElement).style.background = "#e5e7eb";
+                                (e.currentTarget as HTMLElement).style.color = "#222";
+                              }}
+                              onMouseOut={e => {
+                                (e.currentTarget as HTMLElement).style.background = "transparent";
+                                (e.currentTarget as HTMLElement).style.color = "#6b7280";
+                              }}
+                            >
+                              View Details
+                            </Link>
                         </div>
                       )}
                     </div>
@@ -380,10 +506,10 @@ const StudentDashboard: NextPage = () => {
           )}
 
           {/* Achievement Badges Section - Updated to show new badges */}
-          <section className="mb-12">
+            <section className="mb-12">
             <div className="bg-gradient-to-br from-teal-500/10 to-cyan-500/10 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-white">🏆 Your Achievement Badges</h2>
+                <h2 className="text-2xl font-bold text-white">Your Achievement Badges</h2>
                 <Link href="/dashboard/student/achievements" className="text-teal-100 hover:text-white font-medium transition-colors">
                   View All ({achievedBadges.length})
                 </Link>
@@ -394,7 +520,7 @@ const StudentDashboard: NextPage = () => {
                   <div
                     key={badge.id}
                     style={{
-                      background: "linear-gradient(135deg, rgba(167, 123, 202, 0.2), rgba(124, 58, 237, 0.2))",
+                      background: "linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(16, 185, 129, 0.2))",
                       backdropFilter: "blur(8px)",
                       border: "1px solid rgba(20, 184, 166, 0.3)",
                     }}

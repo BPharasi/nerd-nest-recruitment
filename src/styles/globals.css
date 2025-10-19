@@ -148,7 +148,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: #fff;
-  color: var(--color-neutral-40);
+  color: var(--color-neutral-20);
   margin: 0;
 }
 

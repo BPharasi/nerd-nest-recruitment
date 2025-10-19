@@ -16,7 +16,7 @@ import {
   FaTrash,
   FaClock,
   FaExclamationTriangle,
-  FaInfo
+  FaInfo, FaHome
 } from "react-icons/fa";
 
 interface Notification {
@@ -94,7 +94,7 @@ const NotificationsPage: NextPage = () => {
       items: [
         { href: "/jobs", label: "Job Search & Matching", icon: <FaSearch /> },
         { href: "/dashboard/student/applications", label: "Applications", icon: <FaClipboardList /> },
-        { href: "/dashboard/student/interview-practise", label: "Interviews", icon: <FaVideo /> },
+        { href: "/dashboard/student/interview-practise", label: "Practise Interviews", icon: <FaVideo /> },
       ]
     },
     {
@@ -233,6 +233,25 @@ const NotificationsPage: NextPage = () => {
 
         {/* Navigation Groups */}
         <div className="space-y-4">
+          {/* Home Link */}
+          <div className="mb-6">
+            <Link
+              href="/dashboard/student"
+              className="block"
+            >
+              <div 
+                style={{
+                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1))",
+                  backdropFilter: "blur(8px)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                }}
+                className="px-4 py-3 rounded-lg hover:bg-white/20 transition-all duration-300 flex items-center gap-3"
+              >
+                <span className="text-xl text-white"><FaHome /></span>
+                <span className="text-white font-medium">Dashboard Home</span>
+              </div>
+            </Link>
+          </div>
           {navigationGroups.map((group, groupIndex) => (
             <div key={groupIndex} className="mb-6">
               <div className="px-4 py-2 text-sm font-semibold text-white uppercase tracking-wider mb-3">
@@ -279,7 +298,20 @@ const NotificationsPage: NextPage = () => {
         backgroundRepeat: 'no-repeat',
         backgroundAttachment: 'fixed'
       }}>
-        <div className="max-w-4xl mx-auto">
+        {/* Blurred overlay for background image */}
+        <div
+          style={{
+            position: 'fixed',
+            top: '75px',
+            left: '256px',
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            backdropFilter: 'blur(8px)',
+            pointerEvents: 'none'
+          }}
+        />
+        <div className="max-w-4xl mx-auto" style={{ position: 'relative', zIndex: 1 }}>
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-2xl font-bold text-white">Notifications</h1>
@@ -325,7 +357,7 @@ const NotificationsPage: NextPage = () => {
                 <div
                   key={notif.id}
                   style={{
-                    background: "linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(6, 182, 212, 0.2))",
+                    background: "linear-gradient(135deg, rgba(20, 184, 166, 0.5), rgba(6, 182, 212, 0.5))",
                     backdropFilter: "blur(8px)",
                     border: "1px solid rgba(20, 184, 166, 0.3)",
                   }}
