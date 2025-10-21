@@ -36,7 +36,7 @@ const skillChallenges = [
     title: "Generative AI",
     description: "Power up your AI career with expert-led learning",
     students: "1M+",
-    image: "/images/ai-course.jpeg",
+    image: "/images/ai-course.jpg",
     level: "Beginner"
   },
   {
@@ -44,7 +44,7 @@ const skillChallenges = [
     title: "IT Certifications",
     description: "Advance your career with in-demand certifications",
     students: "14.4M+",
-    image: "/images/it-cert.png",
+    image: "/images/it-cert.webp",
     level: "Intermediate"
   },
   // Add more skill challenges as needed

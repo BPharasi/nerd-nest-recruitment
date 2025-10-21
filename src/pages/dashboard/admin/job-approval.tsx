@@ -277,7 +277,20 @@ const JobApprovalPage: NextPage = () => {
           backgroundAttachment: "fixed",
         }}
       >
-        <div className="max-w-6xl mx-auto px-4">
+        {/* Blurred overlay for background image */}
+        <div
+          style={{
+            position: 'fixed',
+            top: '75px',
+            left: '256px',
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            backdropFilter: 'blur(8px)',
+            pointerEvents: 'none'
+          }}
+        />
+        <div className="max-w-7xl mx-auto px-4" style={{ position: 'relative', zIndex: 1 }}>
           <h1 className="text-3xl font-bold text-gray-900 mb-8">Job Approval</h1>
           <div
             className="bg-white rounded-xl shadow-lg p-8"

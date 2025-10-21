@@ -881,6 +881,49 @@ const EmployerApplicationsPage: NextPage = () => {
                           <FaEye />
                           View Details
                         </button>
+                        {/* Email button */}
+                        <button
+                          onClick={() => window.location.href = `mailto:${applicant.email}`}
+                          style={{
+                            background: "linear-gradient(135deg, #14b8a6, #06b6d4)",
+                            color: "white",
+                            padding: "8px 12px",
+                            borderRadius: "8px",
+                            fontSize: "12px",
+                            fontWeight: "600",
+                            border: "none",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "4px",
+                            flex: "1",
+                          }}
+                        >
+                          <FaEnvelope />
+                          Email
+                        </button>
+                        {/* Transcript request button */}
+                        <button
+                          onClick={() => handleRequestTranscript(applicant.id)}
+                          style={{
+                            background: "linear-gradient(135deg, #0ea5e9, #38bdf8)",
+                            color: "white",
+                            padding: "8px 12px",
+                            borderRadius: "8px",
+                            fontSize: "12px",
+                            fontWeight: "600",
+                            border: "none",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "4px",
+                            flex: "1",
+                          }}
+                          disabled={getTranscriptRequest(applicant.id).status !== "none"}
+                        >
+                          <FaFileAlt />
+                          Request Transcript
+                        </button>
                       </div>
 
                       {applicant.status === "pending" && (

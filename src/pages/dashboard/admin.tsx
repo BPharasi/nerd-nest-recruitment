@@ -71,7 +71,7 @@ const navigationGroups = [
   {
     title: "Admin",
     items: [
-      { href: "/dashboard/admin", label: "Dashboard Home", icon: <FaHome /> },
+      
       { href: "/dashboard/admin/users", label: "User Management", icon: <FaUsers /> },
       { href: "/dashboard/admin/employer-verification", label: "Employer Verification", icon: <FaUserTie /> },
       { href: "/dashboard/admin/academic-data", label: "Academic Data", icon: <FaFileAlt /> },
@@ -216,7 +216,20 @@ const AdminDashboard: NextPage = () => {
           backgroundAttachment: "fixed",
         }}
       >
-        <div className="max-w-7xl mx-auto px-4">
+        {/* Blurred overlay for background image */}
+        <div
+          style={{
+            position: 'fixed',
+            top: '75px',
+            left: '256px',
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            backdropFilter: 'blur(8px)',
+            pointerEvents: 'none'
+          }}
+        />
+        <div className="max-w-7xl mx-auto px-4" style={{ position: 'relative', zIndex: 1 }}>
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
             {/* Total Jobs */}
@@ -363,6 +376,7 @@ const AdminDashboard: NextPage = () => {
           {/* ...existing admin links/cards section if needed... */}
         </div>
       </main>
+      {/* ...existing code... */}
     </div>
   );
 };

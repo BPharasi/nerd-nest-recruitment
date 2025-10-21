@@ -618,7 +618,20 @@ const AdminUserManagementPage: NextPage = () => {
           backgroundAttachment: "fixed",
         }}
       >
-        <div className="max-w-7xl mx-auto px-4">
+        {/* Blurred overlay for background image */}
+        <div
+          style={{
+            position: 'fixed',
+            top: '75px',
+            left: '256px',
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            backdropFilter: 'blur(8px)',
+            pointerEvents: 'none'
+          }}
+        />
+        <div className="max-w-7xl mx-auto px-4" style={{ position: 'relative', zIndex: 1 }}>
           {/* Header and Stats */}
           <div className="flex justify-between items-center mb-8">
             <div>
@@ -647,7 +660,7 @@ const AdminUserManagementPage: NextPage = () => {
             <div style={{
               background: "#fff",
               borderRadius: "1rem",
-              boxShadow: "0 2px 8px rgba(59,130,246,0.08)",
+              boxShadow: "0 2px 8px rgba(59,130,246,0.5)",
               padding: "2rem",
               display: "flex",
               flexDirection: "column",
@@ -663,7 +676,7 @@ const AdminUserManagementPage: NextPage = () => {
             <div style={{
               background: "#fff",
               borderRadius: "1rem",
-              boxShadow: "0 2px 8px rgba(59,130,246,0.08)",
+              boxShadow: "0 2px 8px rgba(59,130,246,0.5)",
               padding: "2rem",
               display: "flex",
               flexDirection: "column",
@@ -679,7 +692,7 @@ const AdminUserManagementPage: NextPage = () => {
             <div style={{
               background: "#fff",
               borderRadius: "1rem",
-              boxShadow: "0 2px 8px rgba(59,130,246,0.08)",
+              boxShadow: "0 2px 8px rgba(59,130,246,0.5)",
               padding: "2rem",
               display: "flex",
               flexDirection: "column",
@@ -695,7 +708,7 @@ const AdminUserManagementPage: NextPage = () => {
             <div style={{
               background: "#fff",
               borderRadius: "1rem",
-              boxShadow: "0 2px 8px rgba(59,130,246,0.08)",
+              boxShadow: "0 2px 8px rgba(59,130,246,0.5)",
               padding: "2rem",
               display: "flex",
               flexDirection: "column",
@@ -713,7 +726,7 @@ const AdminUserManagementPage: NextPage = () => {
           <div
             className="bg-white rounded-xl shadow-lg p-8"
             style={{
-              background: "linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(6, 182, 212, 0.2))",
+              background: "linear-gradient(135deg, rgba(20, 184, 166, 0.6), rgba(6, 182, 212, 0.6))",
               backdropFilter: "blur(8px)",
               border: "1px solid rgba(20, 184, 166, 0.3)",
             }}
@@ -843,27 +856,28 @@ const AdminUserManagementPage: NextPage = () => {
                                 <option value="Student">Student</option>
                               </select>
                             </div>
-                            <div className="flex gap-2">
+                            <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
                               <button
-                                onClick={handleSaveUser}
-                                className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+                              onClick={handleSaveUser}
+                              className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
                               >
-                                Save
+                              Save
                               </button>
                               <button
-                                onClick={() => handleRemoveUser(user.id)}
-                                className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
+                              onClick={() => handleRemoveUser(user.id)}
+                              className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
                               >
-                                Remove
+                              Remove
                               </button>
                               <button
-                                onClick={() => { setActionUserId(null); setEditUser(null); }}
-                                className="bg-gray-300 text-gray-700 px-4 py-1 rounded hover:bg-gray-400"
+                              onClick={() => { setActionUserId(null); setEditUser(null); }}
+                              className="bg-gray-300 text-gray-700 px-4 py-1 rounded hover:bg-gray-400"
                               >
-                                Cancel
+                              Cancel
                               </button>
                             </div>
-                          </div>
+                            </div>
+                          
                         )}
                       </td>
                     </tr>
